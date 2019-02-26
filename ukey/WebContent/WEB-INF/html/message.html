@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>消息中心</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">						
+		<link rel="stylesheet" href="/ukey/css/bootstrap.css" />
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">		
+		<script type="text/javascript" src="/ukey/js/jquery-3.3.1.js" ></script>
+		<script type="text/javascript" src="/ukey/js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="/ukey/js/jquery-3.3.1.min.js" ></script>
+		<link rel="stylesheet" href="/ukey/css/public.css" />
+
+		<script typy="text/javascript">
+			var user=null;
+			/*获取当前登录用户*/
+			function getNowUser(){
+				$.ajax({
+					url: "../user/nowUser",
+					data:null,
+					contentType: "aplication/json; charset=utf-8",
+					dataType:"json",
+					async: false,
+					success: function(result){
+						console.log("----------");
+						console.log(result["uid"]);
+						if (result["uid"] != 0) {
+
+							user = result;
+						}
+					}
+				});
+			}
+			/*改变帖子类型*/
+			function changeClass(class_name){
+				var class_id;
+				if (class_name == "second_hand_business") {
+					class_id = 5;
+				}else if(class_name == "lost_and_found"){
+					class_id = 2;
+				}else if (class_name == "search_for_friends") {
+					class_id = 3;
+				}else if (class_name == "daily_dynamics") {
+					class_id = 1;
+				}else if (class_name == "game_discussion") {
+					class_id = 7;
+				}
+				
+				window.location.href = "post/posts?page=1&class_id="+class_id;
+			}
+
+			//替换指定传入参数的值,paramName为参数,replaceWith为新值
+			function replaceParamVal(paramName,replaceWith) {
+				var oUrl = window.location.href.toString();
+				var re=eval('/('+ paramName+'=)([^&]*)/gi');
+				var nUrl = oUrl.replace(re,paramName+'='+replaceWith);
+				　　return nUrl;
+			}
+
+
+
+
+			$(function() {
+				getNowUser();
+				$(".all").css("height", $(window).height());
+
+			})
+
+			$(document).ready(function() {
+				var c = GetQueryString("code");
+				//				var c = GetQueryString("__hbt");
+				//				console.log(c);
+				if(c == null)
+					c = 0;
+				var value = $("#val").val();
+
+				console.log(value);
+				if(c == 1) {
+					document.getElementById("val").value = "注册成功";
+				} else if(c == 2) {
+					document.getElementById("val").value = "密码修改成功";
+				} else if(c == 3) {
+					document.getElementById("val").value = "发生未知错误";
+				} else if(c == 4) {
+					document.getElementById("val").value = "上传头像失败";
+				} else if(c == 5) {
+					document.getElementById("val").value = "退出账号成功";
+				} else if(c == 6) {
+					document.getElementById("val").value = "注册失败";
+				} else if(c == " ") {
+					document.getElementById("val").value = "页面跳转错误";
+				} else {
+					document.getElementById("val").value = "参数错误";
+				}
+
+			});
+
+			window.onresize = function() {
+				var w = document.body.clientWidth - 20;
+				console.log("前面：" + w);
+				$("#example-navbar-collapse").width(w);
+				w = w - 220;
+				console.log("后面" + w);
+				$("#nav").width(w);
+			}
+
+			function load() {
+				var w = document.body.clientWidth - 30;
+				console.log("前面：" + w);
+				$("#example-navbar-collapse").width(w);
+				w = w - 220;
+				console.log("后面" + w);
+				$("#nav").width(w);
+			}
+
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null)
+					return unescape(r[2]);
+				return null;
+			}
+		</script>
+		<style>
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			li {
+				list-style: none;
+			}
+			
+			html {
+				height: 100%;
+			}
+			
+			.navbar {
+				height: 50px;
+				border-bottom: solid 2px black;
+			}
+			
+			.navbar-brand {
+				padding-left: 20px;
+				padding-right: 20px;
+				width: 200px;
+				height: 46px;
+			}
+			
+			.dropdown-menu {
+				width: 120px;
+				min-width: 120px;
+				background-color: rgba(222, 222, 222, 0.8);
+				color: rgb(88, 88, 88);
+			}
+			
+			.navbar-collapse {
+				height: 50px;
+				width: 100%;
+			}
+			
+			li.user{
+				float: right;
+				margin-top: 5px;
+			}
+			li.user>a{
+				padding: 0 0 0 15px;
+			}
+
+			/*jia*/
+			li.login-text{
+				float: right;
+			}
+			li.login-text>a{
+				float: left;
+			}
+			
+			.collapse>ul>li>a,
+			.dropdown-menu>li>a {
+				cursor: pointer;
+				color: white;
+			}
+			
+			.dropdown-menu>li>a:visited,
+			.collapse>ul>li>a:visited {
+				cursor: none;
+			}
+			
+			.dropdown-menu>li>a>span {
+				vertical-align: middle;
+				margin-right: 12px;
+			}
+			
+			li.search {
+				position: relative;
+				float: right;
+			}
+			
+			li.search>input {
+				margin-top: 8px;
+				width: 180px;
+				min-width: 140px;
+				height: 28px;
+				border-radius: 2px;
+			}
+			
+			li.search>span {
+				position: absolute;
+				right: 46px;
+				top: 16px;
+				color: rgb(223, 223, 223);
+				cursor: pointer;
+			}
+			
+			li.search>button {
+				width: 40px;
+				height: 26px;
+				border: none;
+				border-radius: 4px;
+				background-color: rgb(34, 34, 34);
+				color: white;
+			}
+			
+			.user-logo {
+				width: 40px;
+				height: 40px;
+			}
+			
+			#all {
+				width: 100%;
+				height: 100%;
+				background: url(/ukey/image/背景1366-600.jpg) no-repeat;
+				background-size: cover;
+				position: absolute;
+			}
+			
+			#middle {
+				width: 30%;
+				height: 35%;
+				position: absolute;
+				top: 40%;
+				left: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				-moz-transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				-o-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+				background: white;
+				border-radius: 5px;
+				background: rgba(255, 255, 255, 0.3);
+				border: solid 2px white;
+			}
+			
+			#top {
+				width: 100%;
+				padding-left: 1em;
+				color: white;
+				background: rgba(126, 206, 244, 1);
+			}
+			
+			#top span {
+				font-size: 2em;
+				font-family: "NSimSun";
+			}
+			
+			#min {
+				width: 100%;
+				position: absolute;
+				text-align: center;
+				top: 45%;
+			}
+			
+			#middle input {
+				width: 60%;
+				background: rgba(255, 255, 255, 0);
+				color: white;
+				font-size: 2.2em;
+				font-family: "NSimSun";
+				text-align: center;
+				border: none;
+			}
+			
+			#footer {
+				width: 100%;
+				height: 7%;
+				position: absolute;
+				bottom: 0;
+				text-align: center;
+				line-height: 4em;
+				background: #d0d0d0;
+			}
+		</style>
+	</head>
+
+	<body onload="load()">
+		<nav class="navbar navbar-inverse navbar-default no_margin-bottom" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+					<img class="no_padding navbar-brand" src="/ukey/image/LOGO160-60.png" />
+				</div>
+				<div class="collapse navbar-collapse" id="example-navbar-collapse">
+					<ul id="nav" class="nav navbar-nav">
+						<li>
+							<a href="index">首页</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								功能中心<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a id="second_hand_business" onclick="changeClass(this.id)">
+										<span class="
+								glyphicon glyphicon-retweet"></span>二手交易</a>
+								</li>
+								<li>
+									<a id="lost_and_found" onclick="changeClass(this.id)">
+										<span class="
+								glyphicon glyphicon-inbox"></span>失物招领</a>
+								</li>
+								<li>
+									<a id="search_for_friends" onclick="changeClass(this.id)">
+										<span class="
+								glyphicon glyphicon-hand-right"></span>寻找研友</a>
+								</li>
+								<!-- <li class="divider"></li> -->
+								<li>
+									<a id="daily_dynamics" onclick="changeClass(this.id)">
+										<span class="
+								glyphicon glyphicon-comment"></span>日常动态</a>
+								</li>
+								<!-- <li class="divider"></li> -->
+								<li>
+									<a id="game_discussion" onclick="changeClass(this.id)">
+										<span class="glyphicon glyphicon-heart"></span>游戏讨论</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a id="">社团咨询</a>
+						</li>
+						<li>
+							<a id="">关于我们</a>
+						</li>
+						<li>
+							<a id="">联系我们</a>
+						</li>
+
+						<li id="user" class="dropdown user hidden">
+							<a href="#" class="dropdown-toggle no_padding" data-toggle="dropdown">
+								<img id="user-logo" class="user-logo" src="/ukey/image/timg.jpg"><b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href=""><span class="glyphicon glyphicon-user"></span>个人资料</a>
+								</li>
+								<li>
+									<a href=""><span class="glyphicon glyphicon-trash"></span>修改密码</a>
+								</li>
+								<li>
+									<a href=""><span class="glyphicon glyphicon-envelope"></span>收到私信</a>
+								</li>
+								<li>
+									<a href=""><span class="glyphicon glyphicon-off"></span>退出登录</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href=""><span class="glyphicon glyphicon-star"></span>关于我们</a>
+								</li>
+								<li>
+									<a href=""><span class="glyphicon glyphicon-phone"></span>联系我们</a>
+								</li>
+							</ul>
+						</li>
+						<!-- jia -->
+					<li id="login-text" class="login-text">
+						<a href="user/ukeylogin">登录</a>
+						<a href="user/registe">注册</a>
+					</li>
+					<!-- 	<li class="search" id="search">
+							<input type="text" name="search" id="search" value="">
+							<span class="glyphicon glyphicon-search"></span>
+							</input>
+							<button type="button" onclick="">搜索</button>
+						</li> -->
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div id="all">
+			<div id="middle">
+				<div id="top"><span>消息提醒：</span></div>
+				<div id="min">
+					<input id="val" type="text" disabled="disabled" value="" />
+				</div>
+
+			</div>
+			<div id="footer">
+				<a>2018Ukey<span>使用Ukey前必读</span>&nbsp;<span>使用协议</span>&nbsp;<span>隐私政策</span>&nbsp;<span>投诉反馈</span>&nbsp;信息网络视听许可证</a>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>个人中心</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet"
+	href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/ukey/css/bootstrap.css" />
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/ukey/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/ukey/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="/ukey/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="/ukey/css/userInfo.css">
+<link rel="stylesheet" href="/ukey/css/public.css">
+
+</head>
+
+<script>
+	window.uid = GetQueryString("uid");
+	window.uname;
+	window.date;
+	window.schoolid;
+	window.sex;
+	window.description;
+	window.email;
+	window.register_date;
+	window.nowuser = null;
+	/*初始化navbar*/
+	function navLoad(user) {
+    		console.log(user);
+    		var w = document.body.clientWidth - 30;
+    		console.log("前面：" + w);
+    		$("#example-navbar-collapse").width(w);
+    		w = w - 230;
+    		console.log("后面" + w);
+    		$("#nav").width(w);
+    		var userinfo_url = "userinfo?uid="+user.uid;
+    		
+    		if (user.uid !=0) {
+    			console.log("=======");
+    			console.log(user);
+    			$("#user-logo").attr("src", user["image_path"]);
+    			$("#login-text").addClass("hidden");
+    			$("#user").removeClass("hidden");
+    			$("#user_info").attr("href",userinfo_url);
+    			$("#nav_sixin").attr("href",userinfo_url);
+    		}
+    	};
+	function click_fun(btn) {
+		$(btn).parent().children("li").css("background", "none");
+		$(btn).css("background", "#bfbfbf")
+
+	}
+	 function log_out(){
+		
+    	  $.ajax({
+             url:"../user/logout",
+             contentType: "application/json; charset=utf-8", //数据格式
+             type: "POST",
+             async:false,
+             dataType: "json",
+             success: function(r) {
+            	 if(r.result){
+            		// console.log("7777");
+            		// alert(11111111111);
+            		// window.location.href ="http://www.baidu.com"; 
+            		 //window.navigate("http://www.baidu.com");
+            		 self.location='../message?code=5';
+            		 alert(77777777);
+            		 
+            	 }            	 
+             	}
+             });
+	 }
+	function edit_fun() {
+		var name = $("#name").val();
+		console.log(name);
+
+		var date = $("#starttime").val();
+		var newdate = date.replace(/-/g, '/');
+		console.log(typeof newdate);
+		var summary = $("#summary").val();
+		console.log(summary);
+		var sex = $("input[name='sex']:checked").val();
+		console.log(sex);
+		var school = $("#academic").get(0).selectedIndex + 1;
+		console.log(school);
+		$.ajax({
+			url : "../user/updateUser",
+			contentType : "application/json; charset=utf-8", //数据格式
+			data : JSON.stringify({
+				"uid" : uid,
+				"uname" : name,
+				"schoolid" : school,
+				"sex" : sex,
+				"birthday" : newdate,
+				"description" : summary,
+			}),
+			async : false,
+			type : "POST",
+			dataType : "json",
+			success : function(r) {
+				// console.log(r);
+				ajax_user();
+			}
+		});
+	}
+	/*改变帖子类型*/
+	function changeClass(class_name){
+		var class_id;
+		if (class_name == "second_hand_business") {
+			class_id = 5;
+		}else if(class_name == "lost_and_found"){
+			class_id = 2;
+		}else if (class_name == "search_for_friends") {
+			class_id = 3;
+		}else if (class_name == "daily_dynamics") {
+			class_id = 1;
+		}else if (class_name == "game_discussion") {
+			class_id = 7;
+		}
+		var ourl;
+		ourl = replaceParamVal("class_id",class_id);
+		var re=eval('/('+ "page"+'=)([^&]*)/gi');
+	    var ourl = ourl.replace(re,"page"+'='+"1");
+		console.log(ourl);
+		window.location.href = ourl;
+	}
+	
+	//替换指定传入参数的值,paramName为参数,replaceWith为新值
+	function replaceParamVal(paramName,replaceWith) {
+		var oUrl = window.location.href.toString();
+	    var re=eval('/('+ paramName+'=)([^&]*)/gi');
+	    var nUrl = oUrl.replace(re,paramName+'='+replaceWith);
+	　　return nUrl;
+	}
+
+	
+	function notifyUser() {
+		//console.log("7");
+		var nowuser;
+		$.ajax({
+			url : "../user/nowUser",
+			contentType : "application/json; charset=utf-8", //数据格式               
+			type : "POST",
+			dataType : "json",
+			async : false,
+			success : function(r) {
+				console.log(r);
+				window.nowuser = r;
+				console.log(r.uid);
+				nowuser = r.uid;
+			}
+		});
+		if (nowuser != window.uid) {
+			console.log("不同");
+			$("#edit_text").css("visibility", "hidden");
+
+		}
+	}
+
+	$(function() {
+		var testsummary;
+		notifyUser();
+		navLoad(window.nowuser);
+		$("#summary").on('blur',function(){		 
+			 testsummary=$("#summary").val();		 
+			 console.log(testsummary);
+		});
+		$("#starttime").on('focus',function(){		 
+			$("#summary").val(testsummary);
+		});
+		
+		
+		
+		ajax_user();	
+		$("#myModal").on(
+				'show.bs.modal',
+				function(e) {
+					// 关键代码，如没将modal设置为 block，则$modala_dialog.height() 为零
+					$(this).css('display', 'block');
+					var modalHeight = $(window).height() / 2
+							- $('#myModal .modal-dialog').height() / 2;
+					// console.log(modalHeight);
+					$(this).find('.modal-dialog').css({
+						'margin-top' : modalHeight
+					});
+					$("#name").val(window.uname);
+					$("#starttime").val(window.date);
+					$("#summary").val(window.description);
+					$("#academic").val(window.schoolid - 1);
+
+					//console.log(window.sex);
+					if (window.sex == '女') {
+						//console.log("女");
+						$("input[name='sex']").eq(1).click();
+					} else if (window.sex == '男') {
+						//console.log("男");
+						$("input[name='sex']").eq(0).click();
+					}
+
+				});
+	});
+
+	function GetQueryString(name) {
+		//console.log(3);
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		//console.log(reg);
+		var r = window.location.search.substr(1).match(reg);
+		// console.log(r);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+	function ajax_user() {
+		$.ajax({
+			url : "../school/listSchool",
+			contentType : "application/json; charset=utf-8", //数据格式
+			type : "POST",
+			dataType : "json",
+			async : false,
+			success : function(r) {
+				var myselect = document.getElementById("academic");
+				var optionstring;
+
+				for (var i = 0; i < r.length; i++) {
+					var index = r[i].schoolid;
+					//console.log(index);
+					optionstring = "<option value=\"" + index + "\" >"
+							+ r[i].sname + "</option>";
+					myselect.innerHTML += optionstring;
+					//console.log(myselect);
+				}
+			}
+		});
+		$.ajax({
+			url : "../user/userInfo",
+			contentType : "application/json; charset=utf-8", //数据格式
+			data : JSON.stringify({
+				"uid" : window.uid,
+			}),
+			type : "POST",
+			dataType : "json",
+			async:false,
+			success : function(r) {
+				console.log(r);
+				window.uname = r.uname;
+				window.schoolid = r.schoolid;
+				window.sex = r.sex;
+				window.description = r.description;
+				window.date = r.birthday;
+				window.email = r.email;
+				var school;
+				window.register_date = r.register_date.substring(0, 10);
+				console.log(window.register_date);
+				var myselect = document.getElementById("academic");
+
+				//  console.log(window.register_date);
+				console.log(window.schoolid);
+				if (!window.schoolid||window.schoolid==0) {
+					school = myselect.options[0].text;
+				}
+				else
+					school =myselect.options[window.schoolid-1].text;
+
+				var mydate = new Date();
+				var newmydate = mydate.toLocaleDateString();
+				var date = [];
+				date = newmydate.split('/');
+				console.log(date);
+				var date2 = date[0] + "-" + date[1] + "-" + date[2];
+				console.log(date2);
+				var days = daysBetween(window.register_date, date2)
+				console.log(days);
+				$(".user_name,#span_uname").html(window.uname);
+				$("#introduce_text").html(window.description);
+				$("#birthday").html(window.date);
+				$("#school").html(school);
+				$("#email_box").html(window.email);
+				$("#count_days").html(days);
+				if (r.sex == "男") {
+					$("#img_sex").attr("src", "/ukey/image/男性图标.png");
+				} else if (r.sex == "女") {
+					//console.log("女");
+					$("#img_sex").attr("src", "/ukey/image/性别女图标50-50.png");
+				}
+
+			}
+		});
+	}
+	function daysBetween(DateOne, DateTwo) {
+		var OneMonth = DateOne.substring(5, DateOne.lastIndexOf('-'));
+		var OneDay = DateOne.substring(DateOne.length,
+				DateOne.lastIndexOf('-') + 1);
+		var OneYear = DateOne.substring(0, DateOne.indexOf('-'));
+
+		var TwoMonth = DateTwo.substring(5, DateTwo.lastIndexOf('-'));
+		var TwoDay = DateTwo.substring(DateTwo.length,
+				DateTwo.lastIndexOf('-') + 1);
+		var TwoYear = DateTwo.substring(0, DateTwo.indexOf('-'));
+
+		var cha = ((Date.parse(OneMonth + '/' + OneDay + '/' + OneYear) - Date
+				.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
+		return Math.abs(cha);
+	}
+</script>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-default no_margin-bottom"
+		role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<img class="navbar-brand" src="/ukey/image/LOGO160-60.png" />
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<ul id="nav" class="nav navbar-nav">
+					<li><a href="../index">首页</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> 功能中心<b class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a id="second_hand_business" href="../post/posts?class_id=5&page=1"
+								onclick="changeClass(this.id)"> <span
+									class="
+								glyphicon glyphicon-retweet"></span>二手交易
+							</a></li>
+							<li><a id="lost_and_found" onclick="changeClass(this.id)" href="../post/posts?class_id=2&page=1">
+									<span class="
+								glyphicon glyphicon-inbox"></span>失物招领
+							</a></li>
+							<li><a id="search_for_friends"
+								onclick="changeClass(this.id)" href="../post/posts?class_id=3&page=1"> <span
+									class="
+								glyphicon glyphicon-hand-right"></span>寻找研友
+							</a></li>
+							<!-- <li class="divider"></li> -->
+							<li><a id="daily_dynamics" onclick="changeClass(this.id)" href="../post/posts?class_id=1&page=1">
+									<span class="
+								glyphicon glyphicon-comment"></span>日常动态
+							</a></li>
+							<!-- <li class="divider"></li> -->
+							<li><a id="game_discussion" onclick="changeClass(this.id)" href="../post/posts?class_id=7&page=1">
+									<span class="glyphicon glyphicon-heart"></span>游戏讨论
+							</a></li>
+						</ul></li>
+					<li><a id="">社团咨询</a></li>
+					<li><a id="">关于我们</a></li>
+					<li><a id="">联系我们</a></li>
+
+					<li id="user" class="dropdown user hidden"><a href="#"
+						class="dropdown-toggle no_padding" data-toggle="dropdown"> <img
+							id="user-logo" class="user-logo" src="/ukey/image/timg.jpg"><b
+							class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a href="" id="user_info"><span class="glyphicon glyphicon-user"></span>个人资料</a>
+							</li>
+							<li><a href="change_password"><span class="glyphicon glyphicon-trash"></span>修改密码</a>
+							</li>
+							<li><a href="" id="nav_sixin"><span
+									class="glyphicon glyphicon-envelope"></span>收到私信</a></li>
+							<li><a href="" id="logout" onclick="log_out()"><span class="glyphicon glyphicon-off"></span>退出登录</a>
+							</li>
+							<li class="divider"></li>
+							<li><a href=""><span class="glyphicon glyphicon-star"></span>关于我们</a>
+							</li>
+							<li><a href=""><span class="glyphicon glyphicon-phone"></span>联系我们</a>
+							</li>
+						</ul></li>
+
+					<li id="login-text" class="login-text"><a
+						href="../user/ukeylogin">登录</a> <a href="">注册</a>
+					</li>
+
+					<!-- <li class="search" id="search"><input type="text"
+						name="search" id="search" value=""> <span
+						class="glyphicon glyphicon-search"></span> </input>
+						<button type="button" onclick="">搜索</button></li> -->
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="row">
+		<div class="top col-md-10 col-md-offset-1">
+			<img src="/ukey/image/上图背景1075-500.jpg" />
+		</div>
+	</div>
+	<div class="row body">
+		<div class="content col-md-10 col-md-offset-1">
+			<div class="con_top clearfix">
+				<img class="userinfo_img" src="/ukey/image/头像185-185.png"
+					width="200" height="200" />
+				<div class="name_info clearfix">
+					<div class="name clearfix">
+						<img id="img_sex" class="userinfo_img" src="/ukey/image/男性图标.png"
+							width="50" height="50" /> <span class="user_name">冶风YF</span>
+					</div>
+					<div class="clearfix">
+						<span id="xueyuan">计算机与信息学院</span> <span>|</span> <span>发帖<span
+							id="count_tie">25</span></span>
+					</div>
+				</div>
+				<button id="sixin" class="btn-default">私 信</button>
+
+
+			</div>
+			<div class="con_middle clearfix">
+				<ul class="clearfix">
+					<li onclick="click_fun(this)"><img class="userinfo_img"
+						src="/ukey/image/home.png" /> <a href="#">我的主页</a> <span
+						class="shuxian">|</span></li>
+					<li onclick="click_fun(this)"><img class="userinfo_img"
+						src="/ukey/image/sixin.png" /> <a href="#">私信</a> <span
+						class="shuxian">|</span></li>
+					<li onclick="click_fun(this)"><img class="userinfo_img"
+						src="/ukey/image/tie.png" /> <a href="#">帖子</a> <span
+						class="shuxian">|</span></li>
+
+
+				</ul>
+
+			</div>
+
+			<div class="con_body clearfix">
+				<div class="main_info clearfix">
+					<div class="body_navbar clearfix main_info_img">
+						<span> <span id="span_uname"></span>的个人信息
+						</span> <img class="userinfo_img" src="/ukey/image/头像185-185.png"
+							width="200" height="200" />
+
+					</div>
+
+					<div class="introduce_box clearfix">
+						<div class="introduce clearfix">
+							<h1>个人介绍</h1>
+							<div id="introduce_text"></div>
+							<div class="introduce_img">
+								<img class="userinfo_img" src="/ukey/image/介绍卡图标280-280.png"
+									width="280" height="280" />
+							</div>
+
+						</div>
+						<ul class="introduce_ul clearfix">
+							<li class="clearfix">
+								<div class="clearfix">
+									生日：<span id="birthday"></span>
+								</div> <img class="userinfo_img" src="/ukey/image/生日卡图标170-135.png"
+								width="170" height="135" />
+							</li>
+							<li class="clearfix">
+								<div class="clearfix">
+									学院：<span id="school"></span>
+								</div> <img class="userinfo_img" src="/ukey/image/学院卡图标170-135.png"
+								width="155" height="125" />
+							</li>
+							<li class="clearfix">
+								<div class="clearfix">
+									累计天数：<span id="count_days"></span>
+								</div> <img class="userinfo_img" src="/ukey/image/兴趣卡图标170-135.png"
+								width="170" height="135" />
+							</li>
+							<li class="clearfix">
+								<div class="clearfix">
+									邮件：<span id="email_box"></span>
+								</div> <img class="userinfo_img" src="/ukey/image/联系卡图标255-215.png"
+								width="200" height="180 " />
+							</li>
+
+						</ul>
+					</div>
+				</div>
+				<button id="edit_text" class="btn-default" data-toggle="modal"
+					data-target="#myModal">编辑个人资料</button>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">编辑个人资料</h4>
+				</div>
+				<ul id="edit_more" class="clearfix">
+					<li class="clearfix"><label>昵称</label><input type="text"
+						id="name" class="form-control input" /></li>
+					<li class="clearfix"><label>学院</label> <select class="sel"
+						id="academic">
+							<option value='0'></option>
+							<!--  <option>计算机与信息学院</option>
+                        <option>水利与环境学院</option>
+                        <option>土木与建筑学院</option>
+                        <option>机械与动力学院</option>
+                        <option>材料与化工学院</option>
+                        <option>电气与新能源学院</option>
+                        <option>经济与管理学院</option>
+                        <option>医学院</option>
+                        <option>文学与传媒学院</option>
+                        <option>马克思学院</option>
+                        <option>法学与公共管理学院</option>
+                        <option>理学院</option>
+                        <option>生物与制药学院</option>
+                        <option>艺术学院</option>
+                        <option>体育学院</option>
+                        <option>外国语学院</option>
+                        <option>民族学院</option>
+                        <option>国际文化交流学院</option>
+                        <option>继续教育学院</option>
+                        <option>科技学院</option>
+                        <option>创新创业教育学院</option>
+                        <option>其他</option> -->
+					</select></li>
+					<li class="clearfix"><label>简介</label><input type="text"
+						id="summary" class="form-control input" /></li>
+					<li class="clearfix"><label>生日</label><input type="text"
+						name="starttime" class="input form-control" id="starttime"/></li>
+					<li class="clearfix"><label>性别</label>
+						<div>
+							<input id="man" type="radio" name="sex" value="男" checked /><label
+								for="man">男</label> <input id="women" type="radio" name="sex"
+								value="女" /><label for="women">女</label>
+						</div></li>
+
+				</ul>
+
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						onclick="edit_fun()">完成编辑</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<div class="row foot">
+		<span>2018 Ukey <a href="#">使用Ukey前必读</a>&nbsp;<a href="#">使用协议</a>&nbsp;
+			<a href="#">隐私政策</a>&nbsp;<a href="#">投诉反馈</a>信息网络视听许可证011656
+		</span>
+	</div>
+
+</body>
+<script>
+	$("#starttime,#endtime").datetimepicker({
+		language : 'zh-CN', //用自己设置的时间文字
+		todayBtn : 0, //是否显示今天按钮，0为不显示
+		autoclose : 1, //选完时间后是否自动关闭
+		todayHighlight : 1, //高亮显示当天日期
+		startView : 2, //0从小时视图开始，选分;1	从天视图开始，选小时;2从月视图开始，选天;3从年视图开始，选月;4从十年视图开始，选年
+		minView : 2,//最精确时间，默认0；0从小时视图开始，选分；1从天视图开始，选小时；2从月视图开始，选天；3从年视图开始，选月；4从十年视图开始，选年
+		forceParse : 0, //强制解析,你输入的可能不正规，但是它胡强制尽量解析成你规定的格式（format）
+		format : 'yyyy-mm-dd',// 格式,注意ii才是分，mm或MM都是月
+		showMeridian : 0
+	//在日期和小时选择界面，出现上下午的选项,默认false
+	});
+</script>
+</html>

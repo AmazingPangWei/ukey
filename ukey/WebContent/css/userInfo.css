@@ -1,0 +1,391 @@
+
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    cursor:hand;
+}
+a:hover,a:visited,a:active,a:link{
+    text-decoration: none;
+}
+.navbar{
+    height: 50px;
+    border-bottom: solid 2px black;
+}
+.userinfo_img{
+	width:auto !important;
+	height:auto !important;
+}
+
+.navbar-brand {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top:0;
+    padding-bottom:0;
+    width: 200px;
+    height: 46px;
+}
+
+
+.dropdown-menu{
+    width: 120px;
+    min-width: 120px;
+    background-color: rgba(222,222,222,0.8);
+    color: rgb(88,88,88);
+}
+
+.navbar-collapse{
+    height: 50px;
+    width: 100%;
+}
+li.user{
+	float: right;
+	margin-top: 5px;
+}
+li.user>a{
+	padding: 0 0 0 15px;
+}
+
+li.login-text{
+	float: right;
+}
+li.login-text>a{
+	float: left;
+}
+
+.collapse>ul>li>a,.dropdown-menu>li>a{
+    cursor: pointer;
+    color: white;
+}
+.dropdown-menu>li>a:visited,.collapse>ul>li>a:visited{
+    cursor: none;
+}
+
+.dropdown-menu>li>a>span{
+    vertical-align: middle;
+    margin-right: 12px;
+}
+
+li.search{
+    position: relative;
+    float:right;
+}
+li.search>input{
+    margin-top: 8px;
+    width: 180px;
+    min-width: 140px;
+    height: 28px;
+    border-radius: 2px;
+}
+li.search>span{
+    position: absolute;
+    right: 46px;
+    top: 16px;
+    color: rgb(223,223,223);
+    cursor: pointer;
+}
+li.search>button{
+   /* width: 40px;*/
+    height: 26px;
+    border: none;
+    border-radius: 4px;
+    background-color: rgb(34,34,34);
+    color: white;
+}
+
+.user-logo{
+    width: 40px;
+    height: 40px;
+}
+
+.top > img {
+    width: 100%;
+    height: 100%;
+}
+
+.con_top {
+    margin-top: 2%;
+    position: relative;
+    background-color: #eeeeee;
+    padding: 1.5%;
+    border: 2px solid #bfbfbf;
+    border-radius: 5px;
+    border-bottom: none;
+
+}
+
+.con_top > img {
+    top: -95%;
+    left: 3%;
+    border-radius: 5px;
+    position: absolute;
+
+}
+
+.name_info {
+    margin-left: 20%;
+    float: left;
+
+}
+
+.user_name {
+    font-size: 24px;
+    font-weight: bolder;
+    vertical-align: middle;
+
+}
+
+#sixin {
+    float: right;
+    width: 6%;
+    padding: 0.3%;
+    font-size: 20px;
+    border: none;
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
+    margin-top: 2%;
+    margin-right: 2%;
+}
+
+.con_middle {
+    background-color: #dcdcdc;
+
+}
+
+.con_middle > ul {
+    padding: 0px;
+    margin-bottom: 0px;
+    border-top: 3px solid #bfbfbf;
+    border-bottom: 3px solid #bfbfbf;
+}
+.con_middle > ul>li:nth-of-type(1){
+    background-color: #bfbfbf;
+
+}
+
+.con_middle > ul > li {
+    float: left;
+    /* border: 1px solid #bfbfbf; */
+    border-radius: 5px;
+    padding: 0.5% 3%;
+    /*background-color: #bfbfbf;*/
+    position: relative;
+   
+}
+
+.con_middle > ul > li > img {
+    vertical-align: middle;
+}
+
+.con_middle > ul > li > a {
+    font-size: 24px;
+    color: #333;
+    vertical-align: middle;
+}
+
+.shuxian {
+    right: 0px;
+    top:5px;
+    position: absolute;
+    font-size: 24px;
+    color: #bfbfbf;
+}
+
+.main_info_img {
+    position: relative;
+    border: 1px solid #000;
+    padding: 1%;
+    margin-top: 5%;
+    padding-left: 7%;
+    border-radius: 5px;
+    background-color: #b5b5b5;
+
+}
+
+.main_info_img > img {
+    position: absolute;
+    right: 6%;
+    top: -40%;
+    transform: rotate(15deg);
+}
+
+.main_info_img > span {
+    font-size: 50px;
+    font-weight: bold;
+
+}
+
+.con_body {
+    padding: 3%;
+    border: 2px solid #bfbfbf;
+    border-radius: 5px;
+    border-top: none;
+    background-color: #eeeeee;
+    padding-bottom: 2%;
+
+}
+
+.main_info {
+    /* border: 1px solid #f1b0b7;*/
+    background-image: url("/ukey/image/背景.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    border: 1px solid #000;
+    border-radius: 16px;
+}
+
+.introduce_box {
+    margin-top: 6%;
+    padding: 2%;
+
+}
+
+.introduce {
+    float: left;
+    width: 30%;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #eee;
+}
+
+.introduce > h1 {
+    text-align: center;
+    margin: 5% 5%;
+    margin-bottom: 5%;
+
+}
+
+#introduce_text {
+    font-size: 30px;
+    margin: 0% 5%;
+    margin-bottom: 5%;
+
+}
+
+.introduce_img > img {
+    width: 100%;
+
+}
+
+.introduce_ul {
+    float: right;
+    width: 65%;
+    width: 65%;
+    /* padding-left: 5%; */
+
+
+}
+
+.introduce_ul > li {
+    background-color: #eee;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin-bottom: 5%;
+    padding-left: 5%;
+}
+.introduce_ul > li>div{
+    font-size: 30px;
+    font-weight: bold;
+    float: left;
+    vertical-align: middle;
+    margin-top: 8%;
+    /* width: 60%; */
+
+}
+.introduce_ul > li>img{
+    vertical-align: middle;
+    float: right;
+
+}
+.introduce_ul > li:nth-of-type(1){
+    width: 70%;
+    margin-left: 6%;
+}
+.introduce_ul > li:nth-of-type(2){
+    width: 90%;
+    margin-left: 2%;
+}
+.introduce_ul > li:nth-of-type(3){
+    width: 70%;
+    margin-left: 16%;
+}
+.introduce_ul > li:nth-of-type(4){
+    width: 100%;
+    margin-left: 0%;
+    margin-bottom: 0%;
+    padding-left:3%;
+}
+#edit_text{
+    padding-top:1%;
+    padding-bottom: 1%;
+    margin-top: 3%;
+    text-align: center;
+    margin-left: 45%;
+    width: 15%;
+    font-size: 22px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #b5b5b5;
+
+}
+body{
+    background-image: url("/ukey/image/下面渐变背景1366-750.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+
+}
+.body{
+    background: linear-gradient(to bottom, #c7ecc1 0%,#8bd77d 100%);
+}
+.foot{
+    background-color: #d0d0d0;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+.dropdown-menu{
+    width: auto;
+
+}
+#edit_more{
+    margin-top: 5%;
+}
+
+
+#edit_more>li{
+margin-bottom: 1%;
+
+}
+#edit_more>li>label{
+    float: left;
+    font-size: 18px;
+}
+#edit_more>li>.input{
+    font-size: 16px;
+    margin-left: 15%;
+}
+#edit_more>li>.input{
+    width: 60%;
+}
+#edit_more>li>select{
+    width: 60%;
+    margin-left: 9%;
+    height: 30%;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    appearance: none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+}
+#edit_more>li>div{
+    font-size: 18px;
+    margin-left: 15%;
+}
+
+
+

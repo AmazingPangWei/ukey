@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>insertReply测试</title>
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	 $(function(){
+	      $("#b").click(function(){
+	    	  $.ajax({
+	              url: '../user/signin',
+	              contentType: "application/json; charset=utf-8", //数据格式
+	              data:JSON.stringify(
+	            		  {"email":"798004868@qq.com","password":"123456789"}
+	              ),
+	              type: "POST",
+	              dataType: "json",
+	              success: function(result){
+	                console.log(result)
+	              }
+	          });
+	      });
+	  });
+	</script>
+</head>
+<body>
+	<div id="message"></div>
+	<button id="b">测试ajax</button>
+</body>
+</html>

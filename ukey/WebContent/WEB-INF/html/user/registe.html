@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Ukey注册</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" href="/ukey/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/ukey/css/bootstrap.css" />
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="/ukey/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/ukey/css/public.css" />
+<style type="text/css">
+body {
+	width: 100%;
+	/*height: 100%;*/
+	background: url(/ukey/image/注册背景1366-768.jpg) 0 0 no-repeat;
+	background-size: 100% 100%;
+}
+
+li {
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	vertical-align: middle;
+}
+
+@media screen and (max-width: 760px) {
+	.back {
+		margin: 0 auto;
+		margin-top: 3em;
+		height: 100%;
+	}
+	img {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@media screen and (min-width: 760px) {
+	.back {
+		margin: 0 auto;
+		margin-top: 3em;
+		height: 100%;
+	}
+}
+
+@media screen and (max-width: 760px) {
+	.head {
+		font-size: 0.4em;
+	}
+	.slogan>li {
+		text-align: left;
+		font-size: 1em;
+		font-weight: bold;
+		color: white;
+	}
+	.slogan>li:nth-of-type(2) {
+		margin-top: -0.5em;
+	}
+	.slogan>li:nth-of-type(3) {
+		font-size: 1em;
+		margin-top: -0.5em;
+	}
+	.back {
+		margin: 3em auto;
+		height: 100%;
+	}
+}
+
+@media screen and (min-width: 760px) {
+	.slogan>li {
+		text-align: left;
+		font-size: 4em;
+		font-weight: bold;
+		color: white;
+	}
+	.slogan>li:nth-of-type(2) {
+		margin-top: -0.5em;
+	}
+	.slogan>li:nth-of-type(3) {
+		font-size: 1.5em;
+		margin-top: -1em;
+	}
+}
+
+ul.nav {
+	height: 50px;
+}
+
+ul.nav>li {
+	line-height: 50px;
+	font-size: 16px;
+}
+
+.margin_top {
+	/*text-align: center;*/
+	margin-top: 3em;
+}
+
+form {
+	padding: 1em;
+	/*margin-bottom: 3em;*/
+	height: auto;
+	border-radius: 2%;
+	padding-left: 1em;
+	background-color: rgb(135, 204, 255);
+}
+
+.form_img {
+	width: 20%;
+	/*height: 20%;*/
+}
+
+.form-group {
+	padding: 0;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.form-group>label {
+	display: block;
+	text-align: left;
+	font-size: 1.5em;
+	font-weight: bold;
+	color: white;
+	margin-bottom: 0;
+}
+
+.form-group>input {
+	width: 95%;
+	/*float: left;*/
+}
+
+.li_check {
+	height: 2em;
+	vertical-align: middle;
+}
+
+.checkbox {
+	width: 1.2em;
+	height: 1.2em;
+	line-height: em;
+	border-radius: 2%;
+	float: left;
+}
+
+.li_check>label {
+	float: left;
+	text-indent: 0.5em;
+	line-height: 1.8em;
+	color: white;
+}
+
+.submit {
+	/*background-color: cadetblue;*/
+	text-align: left;
+}
+
+.submit>input {
+	height: 2.5em;
+	background-color: rgb(0, 204, 153);
+	color: white;
+	border: none;
+	font-size: 1em;
+	font-weight: bolder;
+}
+
+.prompting {
+	color: red;
+	float: right;
+	display: none;
+	margin-top: -1.2em;
+	margin-right: 4em;
+}
+</style>
+<script type="text/javascript">
+			$(function() {
+				$(".all").css("height", $(window).height());
+				//验证邮箱合不合法
+				$("input").each(function() {
+					$(this).blur(function() {
+						if($(this).val() === "") { //输入不能为空
+							$(this).prev().text("输入不能为空");
+							$(this).prev().css("display", "block");
+							return false;　　
+						} else {
+							var id = $(this).attr('id');
+							var reg_email = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+							var reg_password = /^[a-zA-Z0-9]{6,12}$/
+							if(id == "email" && !reg_email.test($(this).val())) {
+								$(this).prev().text("请输入正确的邮箱");
+								$(this).prev().css("display", "block");
+								return false;
+							} else if(id == "email" && reg_email.test($(this).val())) {
+								var value = $(this).val();
+								console.log(value);
+								//验证email存不存在
+								$.ajax({
+									url: "ifuserexist",
+									contentType: "application/json", //数据格式
+									type: "POST",
+									data: JSON.stringify({"email": value}),								
+									dataType:"json",
+									success: function(result) {
+										$("#email").prev().css("display", "none");
+										console.log(result["result"]);
+										if(result["result"]){
+											$("#email").prev().text("用户已存在");
+											$("#email").prev().css("display", "block");
+										}else{
+											
+										}
+									},
+									error: function(e) {
+										console.log("失败");
+										console.log(e);
+									}
+								});
+							} else if(id == "password" && !reg_password.test($(this).val())) {
+								$(this).prev().text("请按要求填写密码");
+								$(this).prev().css("display", "block");
+								return false;
+							} else if(id == "repassword" && $("#password").val() != $("#repassword").val()) {
+								$(this).prev().text("前后密码不一致");
+								$(this).prev().css("display", "block");
+								return false;
+							} else {
+								$(this).prev().css("display", "none");
+							}
+						}
+					})
+				});
+			})
+			
+			
+			
+			
+			function toVaild(){
+				var email = $("#email").val();
+				var password = $("#password").val();
+				if(email != null && email != "" && password != null && password != "")
+				{
+					$.ajax({
+						url : "signin",
+						contentType : "application/json; charset=utf-8", //数据格式
+						type : "POST",
+						data: JSON.stringify({"email":email,"password":password}),
+						async : false,
+						dataType : "json",
+						success : function(result) {
+							if (result["result"]) {
+								window.location.href= "../message?code=1";
+									alert(111111);
+									
+								return false;
+							}else{
+								self.location = '../message?code=6';
+								alert(111111);
+								}
+						},
+						error:function(e){
+							console.log(e);
+						}
+					});
+				}else{
+					return false;
+				}
+			}
+		</script>
+</head>
+
+<body class="all">
+	<div class="container back">
+		<div class="row head">
+			<div class="col-xs-0 col-md-8">
+				<div class="container-fluid">
+					<ul class="nav row">
+						<li class="col-xs-2 col-md-2 no_padding"><img src="/ukey/image/logo100-40.jpg" /></li>
+						<li class="col-xs-1 col-md-1  no_padding">
+							<p>
+								<a href="../index">首页</a>
+							</p>
+						</li>
+						<li class="col-xs-2  col-md-2 no_padding ">
+							<p>
+								<a href="#">社团咨询</a>
+							</p>
+						</li>
+						<!-- <li class="col-xs-2 col-md-2 no_padding ">
+							<p>
+								<a href="#">二手交易</a>
+							</p>
+						</li> -->
+						<li class="col-xs-2 col-md-2 no_padding ">
+							<p>
+								<a href="#">交流中心</a>
+							</p>
+						</li>
+						<li class="col-xs-2 col-md-2 no_padding">
+							<p>
+								<a href="#">关于我们</a>
+							</p>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+			<div class="col-xs-4 col-md-4 hidden-lg hidden-md">
+				<div class="container-fluid">
+					<ul class="row">
+						<li class="col-xs-3 no_padding">
+							<div class="div_img">
+								<img src="/ukey/image/邮箱图标40-40.png" />
+							</div>
+
+						</li>
+						<li class="col-xs-3 no_padding">
+							<div class="div_img">
+								<img src="/ukey/image/微博图标40-40.png" />
+							</div>
+
+						</li>
+						<li class="col-xs-3 no_padding">
+							<div class="div_img">
+								<img src="/ukey/image/微信图标40-40.png" />
+							</div>
+
+						</li>
+						<li class="col-xs-3 no_padding">
+							<div class="div_img">
+								<img src="/ukey/image/QQ图标40-40.png" />
+							</div>
+
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid margin_top no_padding">
+			<div class="row">
+				<div class="col-xs-0 col-md-6">
+					<ul class="slogan">
+						<li><span>&UKEY</span></li>
+						<li><span>LIVELIHOOD</span></li>
+						<li><span>Join&nbsp;us&nbsp;in&nbsp;choosing&nbsp;another&nbsp;life.</span></li>
+					</ul>
+				</div>
+				<div class="col-xs-12 col-md-4 col-md-offset-2 ">
+					<form role="form" method="post">
+						<ul>
+							<li class="form-group"><img src="/ukey/image/账户图标90-90.png" class="img-circle form_img"></li>
+							<li class="form-group"><label for="email">账户</label> <span class="prompting">请输入正确的邮箱格式</span> <input type="text" class="form-control" name="email" id="email" placeholder="请输入邮箱地址">
+							</li>
+							<li class="form-group"><label for="password">密码</label> <span class="prompting">请按照正确的格式输入</span> <input type="password" class="form-control" name="password" id="password"
+								placeholder="请输入密码"></li>
+
+							<li class="form-group"><label for="repassword">确认密码</label> <span class="prompting">两次密码不一致</span> <input type="password" class="form-control" id="repassword" placeholder="请确认密码"></li>
+							<!--<li class="form-group">
+									<label for="code">验证码</label>
+									<input type="text" class="form-control" name="code" id="code" placeholder="请输入验证码">
+								</li>-->
+							<li class="li_check hidden-md hidden-lg"><input type="checkbox" class="checkbox" name="checkbox" id="checkbox" /> <label for="checkbox">我同意《Ukey平台注册协议》</label></li>
+							<li class="form-group submit"><input type="submit" id="submit" name="" onclick="toVaild()" value="注&nbsp册" /></li>
+						</ul>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

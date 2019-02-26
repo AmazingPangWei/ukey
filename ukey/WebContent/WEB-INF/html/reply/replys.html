@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>评论</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/ukey/css/bootstrap.css"/>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/ukey/js/wangEditor.min.js"></script>
+    <script src="/ukey/js/template-web.js" th:src="@{/js/template-web.js}" charset="utf-8"></script>
+   	<link rel="stylesheet" href="/ukey/css/comment.css"/>
+   	<link rel="stylesheet" type="text/css" href="/ukey/css/public.css" />
+   	
+
+   <script type="text/html" id="test">
+        <li class="clearfix">
+            <div id="content_newbar_6" class="col-md-12 content_newbar">
+                <div class="content_bar1 col-md-3"></div>
+                <div class="content_bar2 col-md-6"></div>
+                <div class="content_bar3 col-md-3"></div>
+            </div>
+            <div class="col-md-12 response_box">
+                <span class="count_floor">{{title}}F</span>
+                <div class="louzhu clearfix">
+                    <div class="louzhu_img">
+                        <a class="clearfix" href={{userurl}}><img src={{path}} /></a>
+                        <div class="resusername">{{name}}</div>
+                    </div>
+                    <div class="text_area clearfix" id="text_area">
+                        <div id ={{textarea}} class="textarea clearfix"></div>
+                        <span class="date">
+                         {{date}}
+                        </span>
+                        <button id={{button_id}} class="response" data-toggle="collapse" data-target={{phuifu_aid}} onclick=
+                                "rsbtn_click(this)">
+                            收起回复
+                        </button>
+                    </div>
+
+                </div>
+				<div id ={{huifu_aid}} class = "clearfix collapse in huifu_aclass">
+                	<div class="huifu_box clearfix" id={{huifu_id}}>
+
+               		 </div>
+					<div class="huifu_box clearfix collapse" id={{phuifu_id}}>
+
+               		 </div>
+				</div>
+            </div>
+
+        </li>
+    </script>
+	 <script type="text/html" id="html_huifu">
+        <div class="louzhu clearfix huifu_smallbox">
+            <div class="response_img clearfix">
+                <a href={{huifu_url}}><img src={{huifu_path}} /></a>
+                <div class="s_resusername">{{rname}}</div>
+            </div>
+            <div class="s_text_area clearfix">
+                <textarea class="textarea1 clearfix" wrap="hard" readonly>{{message}}</textarea>
+            </div>
+        </div>
+       
+
+    </script>
+    <script type="text/html" id="html_shuru">
+		 <div class="countresponse">
+               <div class="count_huifu" id={{count_huifu_id}}>
+                            还有<span>{{count}}</span>条回复，<a data-toggle="collapse" href={{pahuifu_id}} onclick="clickmore(this);">点击查看</a>
+                        </div>
+            <button data-toggle="collapse" data-target={{toosay_pid}}>我也说一句</button>
+        </div>
+        <div class="toosay clearfix collapse" id={{toosay}}>
+            <textarea  class="textarea2 clearfix" wrap="hard" class="toosay_text"></textarea>
+            <button class="btn-primary btn fabiao" onclick="fabiao_fun2(this)">发表</button>
+        </div>
+    </script>
+    
+
+
+    <script type="text/javascript">
+    	window.uid;
+    	window.rid=[];
+    	window.nowuser;
+    	function navLoad(user) {
+    		console.log(user);
+    		var w = document.body.clientWidth - 30;
+    		console.log("前面：" + w);
+    		$("#example-navbar-collapse").width(w);
+    		w = w - 230;
+    		console.log("后面" + w);
+    		$("#nav").width(w);
+    		var userinfo_url = "../user/userinfo?uid="+user.uid;
+    		
+    		if (user.uid !=0) {
+    			console.log("=======");
+    			console.log(user);
+    			$("#user-logo").attr("src", user["image_path"]);
+    			$("#login-text").addClass("hidden");
+    			$("#user").removeClass("hidden");
+    			$("#user_info").attr("href",userinfo_url);
+    			$("#sixin").attr("href",userinfo_url);
+    		}
+    	};
+    	
+    	
+    	
+        $(function () {  
+        	/*屏幕大小改变触发事件*/	
+        	window.uid = 1;
+        	var mypid=GetQueryString("pid");
+        	$.ajax({
+                url:"../post/addReading",
+                contentType: "application/json; charset=utf-8", //数据格式               
+                data: JSON.stringify({
+                    "pid": mypid,
+                }),
+                type: "POST",
+                dataType: "json",
+                async:false,
+                success: function(r) {
+  						return true;      	 
+                }
+       		});	
+        	//console.log(window.uid);
+            var mypid=GetQueryString("pid"); 
+            var page = $("#currentpage").html();
+            var totalpage = 1;         
+           // console.log("page"+page);
+            console.log("mypid"+mypid); 
+                
+            if(mypid !=null)
+            {
+            	console.log("开始传数据");
+            	ajaxfun(mypid,page);    
+            }        
+          	
+            
+        });
+        
+        function hasUser(){
+        	console.log("7");
+        	 $.ajax({
+                 url:"../user/nowUser",
+                 contentType: "application/json; charset=utf-8", //数据格式               
+                 type: "POST",
+                 dataType: "json",
+                 async:false,
+                 success: function(r) {
+                	 console.log(r);
+                	 console.log("777777");
+                	 if(r.uid==0){
+                		editor.$textElem.attr('contenteditable', false); 
+                	 	$("textarea").attr("disabled","disabled");              	
+                 	}
+                 	else{
+                 		window.nowuser= r;
+                 		window.uid = r.uid;
+                 	}
+                 }
+        	 });    	       	      	
+        }
+        
+        
+        
+        function fabiao_fun(btn){
+        	 var mypid=GetQueryString("pid");
+        	  var page = $("#currentpage").html();
+        	 var message = editor.txt.html();
+        	 $.ajax({
+                 url:"../reply/insertReply",
+                 contentType: "application/json; charset=utf-8", //数据格式
+                 data: JSON.stringify({
+                     "pid": mypid,
+                     "uid":window.uid,
+                     "message": message,
+                 }),
+                 type: "POST",
+                 dataType: "json",
+                 success: function(r) {
+                	 $("#response_ul").html("");
+                	 ajaxfun(mypid,page);
+                	 $("#editor").html("");
+                 	}
+                 });
+        	
+        	
+        	
+        }
+        function fabiao_fun2(btn){
+       	 var mypid=GetQueryString("pid");
+       	  var page = $("#currentpage").html();
+       	 var message = $(btn).prev().val();
+       	 //console.log(message+"dddd");
+       	 var rid = parseInt($(btn).parents(".response_box").children(".count_floor").eq(0).html())-1;   
+       	// console.log(rid+"sdfa");
+        $.ajax({
+                url:"../comment/insertComment",
+                contentType: "application/json; charset=utf-8", //数据格式
+                data: JSON.stringify({
+                    "rid":window.rid[rid],
+                    "c_uid":window.uid,
+                    "message": message,
+                }),
+                type: "POST",
+                dataType: "json",
+                success: function(r) {
+                	 $("#response_ul").html("");
+               	 	ajaxfun(mypid,page);
+               	 $(btn).parent().prev().show();
+                	}
+                }); 
+        	
+       	
+       	
+       }
+        
+        
+        function clickmore(btn){
+        	$(btn).parent().hide();
+        	
+        	
+        }
+        
+        function GetQueryString(name)
+        {
+            //console.log(3);
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            //console.log(reg);
+            var r = window.location.search.substr(1).match(reg);
+           // console.log(r);
+            if(r!=null)
+                return  unescape(r[2]);
+            return null;
+        }
+        function rsbtn_click(btn){
+        	console.log($(btn).parents('.louzhu').next().children(".huifu_box").eq(0));
+            if($(btn).parents('.louzhu').next().css("display")!="none") {
+            	 $(btn).css("background", "none");                        
+                $(btn).html("展开回复");
+             //   $(btn).parents('.louzhu').next().children(".countresponse").eq(0).children(".count_huifu").eq(0).css("visibility","hidden");
+            }
+            else {
+            	 console.log("ins");               
+                $(btn).css("background", "#fad8bf");
+                $(btn).html("收起回复");
+               var text_height2 = $("div.response_img").height()+"px";
+                console.log(text_height2);
+                $(".s_text_area").css("min-height",text_height2);
+              //  $(btn).parents('.louzhu').next().children(".huifu_box").eq(1).hide();
+              //  $(btn).parents('.louzhu').next().children(".countresponse").eq(0).children(".count_huifu").eq(0).css("visibility","visible");
+               
+            }
+          }
+        function nextpage(){
+        	$(".prve").attr("disabled",false);
+        	$(".prve").attr("style","cursor: auto");
+        	$(".prve").html('<i class="edit" style="opacity: 1">上一页</i>');   
+        	var currentpage = $("#currentpage").html();
+        	var totalpage = $("#totalpage").html();
+        	var mypid=GetQueryString("pid"); 
+        	
+        		
+        		currentpage = parseInt(currentpage)+1;   
+        		console.log(currentpage);
+        	if(currentpage>totalpage){
+        		currentpage =totalpage;
+        		//$(".next").attr("href","javascript:return false;");     
+        		$(".next").attr("disabled",true);
+        		$(".next").attr("style","cursor: default");
+        		$(".next").html('<i class="edit" style="opacity: 0.2">下一页</i>');	
+        		$("#currentpage").html(currentpage);
+        	}
+        	else{
+        		$("#currentpage").html(currentpage);
+        		$("#response_ul").html("");
+        		ajaxfun(mypid,currentpage);
+        	}			
+        }
+        function prevpage(){
+        	$(".next").attr("disabled",false);
+        	$(".next").attr("style","cursor: auto");
+        	$(".next").html('<i class="edit" style="opacity: 1">下一页</i>');      
+        	var currentpage = $("#currentpage").html();
+        	var totalpage = $("#totalpage").html();
+        	var mypid=GetQueryString("pid"); 
+        	currentpage -=1;
+        	if(currentpage<1){
+     
+        		currentpage=1;
+        		//$(".prve").attr("href","javascript:return false;");       		
+        		$(".prve").attr("disabled",true);
+        		$(".prve").attr("style","cursor: default");
+        		$(".prve").html('<i class="edit" style="opacity: 0.2">上一页</i>');
+        		 $("#currentpage").html(currentpage);
+        	
+        	}
+        	else{
+        		$("#currentpage").html(currentpage);
+        		$("#response_ul").html("");
+        		ajaxfun(mypid,currentpage);
+        	}
+        					
+        }
+        function total(r){
+        	var totallength;
+        	totallength =r.tatalReply; 
+        	console.log("totallength"+totallength);
+            $("#totallength").html(totallength);
+            if(totallength % 6==0)
+         	   totalpage=parseInt(totallength/6);
+            else
+         	   totalpage=parseInt(totallength/6)+1;  
+            console.log("totalpage"+totalpage);
+            $("#totalpage").html(totalpage);
+        	
+        }    
+        
+        function zhankai(list,huifu,toosay,toosay_pid,count_huifu_id,huifu_aid,phuifu_id,pahuifu_id){
+        	console.log(list);
+        	 var mylength = list.comments.length;
+        	 
+        	 var count = mylength;
+        	 console.log(mylength);       	
+            // console.log(list.comments[0]);   
+        	 if(mylength>4){
+          		 console.log("test");
+          			count = parseInt(count) - 4;  
+          		   mylength=4;         		     		    
+          		 //console.log(count);
+          	   }//end if             	  
+          	   for(var j = 0; j<mylength;j++){
+          		 var huifu_uid = list.comments[j].user.uid;
+          		 var huifu_url = "../user/userinfo?uid="+huifu_uid;
+          	   		var data2={
+          	   				rname:list.comments[j].user.uname,
+          				   message:list.comments[j].message, 
+          				   huifu_path:list.comments[j].user.image_path,
+          				   huifu_url:huifu_url,
+          	 	  }//end data2                            	   		
+            	 		var html2 = template('html_huifu',data2);
+          	   		//console.log(data.huifu_id);                           	   	
+             			document.getElementById(huifu).innerHTML +=html2; 
+             			   					                		            		
+             		}//end for   
+          	   for(var k = 4; k>3&&k<list.comments.length;k++){
+          		 var huifu_uid = list.comments[j].user.uid;
+          		 var huifu_url = "../user/userinfo?uid="+huifu_uid;
+         	   		var data2={
+         	   				rname:list.comments[k].user.uname,
+         				   message:list.comments[k].message, 
+         				   huifu_path:list.comments[k].user.image_path,
+         				  huifu_url:huifu_url,
+         	 	  }//end data2                            	   		
+           	 		var html2 = template('html_huifu',data2);
+         	   		//console.log(data.huifu_id);                           	   	
+            			document.getElementById(phuifu_id).innerHTML +=html2;         			         								                		            		
+            		}//end for  
+            		    	
+            		
+          		  var data3={
+						toosay:toosay,
+						toosay_pid,toosay_pid,
+						count:count,
+						count_huifu_id:count_huifu_id,
+						pahuifu_id:pahuifu_id,
+						
+					}
+					 var html3 = template('html_shuru',data3); 
+             		
+             		console.log(huifu_aid+"11111");
+            	 	document.getElementById(huifu_aid).innerHTML +=html3;	
+        	
+        }
+        function log_out(){
+        	 $.ajax({
+                 url:"../user/logout",
+                 contentType: "application/json; charset=utf-8", //数据格式
+                 type: "POST",
+                 dataType: "json",
+                 async:false,
+                 success: function(r) {
+                	 if(r.result){
+                		 window.location.href ="../message?code=5"; 
+                 	}
+                 }
+             });	
+        }
+        
+        function ajaxfun(mypid,page){
+        	 $.ajax({
+                 url:"../reply/listReply",
+                 contentType: "application/json; charset=utf-8", //数据格式
+                 data: JSON.stringify({
+                     "pid": mypid,
+                     "page": page,
+                 }),
+                 type: "POST",
+                 dataType: "json",
+                 success: function(r) {
+                    var listReply = eval(r.listReply);               
+                    var i;
+                    
+                   total(r);
+                    for( i = 0; i<listReply.length; i++){
+                    	window.rid[i] = listReply[i].rid;
+                    	console.log(window.rid[i]);
+                        console.log(listReply[i]);
+                       // console.log(listReply[i].user.image_path);
+                        var huifu = "huifu_box"+listReply[i].rid;
+                        var button_id ="response"+i; 
+                        var huifu_pid = "#"+huifu;
+                        var toosay = "toosay"+i;
+                        var toosay_pid = "#"+toosay;
+                        var count_huifu_id = "count_huifu_id"+i;
+                        var pcount_huifu_id = "#count_huifu_id"+i;
+                        var huifu_aid = "huifu_aid"+i;
+                        var phuifu_id = "phuifu_id"+i;
+                        var pahuifu_id = "#"+phuifu_id;
+                        var phuifu_aid = "#"+huifu_aid;
+                        var textarea = "textarea"+i;
+                        var uid = listReply[i].uid;
+                        var userurl = "../user/userinfo?uid="+uid;                       
+                        var data ={
+                                title:(page-1)*6+i+1,
+                                userurl:userurl,
+                                name:listReply[i].user.uname,
+                             	textarea:textarea,
+                                date:listReply[i].date,                                 
+                                button_id:button_id,
+                                huifu_id:huifu,
+                                huifu_pid:huifu_pid,
+                                path:listReply[i].user.image_path,
+                                huifu_aid:huifu_aid,
+                                phuifu_id:phuifu_id,
+                                phuifu_aid:phuifu_aid,
+                                
+                            };
+                       		 var html1 = template('test', data);
+                       		document.getElementById("title").innerHTML = r.title; 
+                        	document.getElementById("response_ul").innerHTML +=html1; 
+                        	document.getElementById(textarea).innerHTML =listReply[i].message;
+                        	console.log(listReply[i].message);
+                              zhankai(listReply[i],huifu,toosay,toosay_pid,count_huifu_id,huifu_aid,phuifu_id,pahuifu_id);                           
+                              
+                              if(listReply[i].comments.length>4){
+                      	 		$(pcount_huifu_id).css("visibility","visible");
+                      	 		console.log("debug");           	 		
+                      	 	}
+                      	 	else{
+                      	 		$(pcount_huifu_id).css("visibility","hidden");
+                      			console.log("debug1");
+                      	 	}
+                              
+            					 var text_height = $(".louzhu_img").height()+"px";
+            		                console.log(text_height);
+            		                $(".text_area").css("min-height",text_height);
+           		 
+                    }//endfor   
+                    hasUser();
+                    navLoad(window.nowuser);
+                    
+                 }
+                 
+             });
+        	 
+        	
+        	
+        }
+
+
+
+
+
+
+    </script>
+
+</head>
+
+
+
+<body>
+<nav class="navbar navbar-inverse navbar-default no_margin-bottom"
+		role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<img class="navbar-brand" src="/ukey/image/LOGO160-60.png" />
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<ul id="nav" class="nav navbar-nav">
+					<li><a id="" href="../index">首页</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> 功能中心<b class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a id="second_hand_business" href="../post/posts?class_id=5&page=1"
+								onclick="changeClass(this.id)"> <span
+									class="
+								glyphicon glyphicon-retweet"></span>二手交易
+							</a></li>
+							<li><a id="lost_and_found" onclick="changeClass(this.id)" href="../post/posts?class_id=2&page=1">
+									<span class="
+								glyphicon glyphicon-inbox"></span>失物招领
+							</a></li>
+							<li><a id="search_for_friends"
+								onclick="changeClass(this.id)" href="../post/posts?class_id=3&page=1"> <span
+									class="
+								glyphicon glyphicon-hand-right"></span>寻找研友
+							</a></li>
+							<!-- <li class="divider"></li> -->
+							<li><a id="daily_dynamics" onclick="changeClass(this.id)" href="../post/posts?class_id=1&page=1">
+									<span class="
+								glyphicon glyphicon-comment"></span>日常动态
+							</a></li>
+							<!-- <li class="divider"></li> -->
+							<li><a id="game_discussion" onclick="changeClass(this.id)" href="../post/posts?class_id=7&page=1">
+									<span class="glyphicon glyphicon-heart"></span>游戏讨论
+							</a></li>
+						</ul></li>
+					<li><a id="">社团咨询</a></li>
+					<li><a id="">关于我们</a></li>
+					<li><a id="">联系我们</a></li>
+
+					<li id="user" class="dropdown user hidden"><a href="#"
+						class="dropdown-toggle no_padding" data-toggle="dropdown"> <img
+							id="user-logo" class="user-logo" src="/ukey/image/timg.jpg"><b
+							class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a href="" id="user_info"><span class="glyphicon glyphicon-user"></span>个人资料</a>
+							</li>
+							<li><a href="../user/change_password"><span class="glyphicon glyphicon-trash"></span>修改密码</a>
+							</li>
+							<li><a href="" id ="sixin"><span
+									class="glyphicon glyphicon-envelope"></span>收到私信</a></li>
+							<li><a id="logout" onclick="log_out()"><span class="glyphicon glyphicon-off"></span>退出登录</a>
+							</li>
+							<li class="divider"></li>
+							<li><a href=""><span class="glyphicon glyphicon-star"></span>关于我们</a>
+							</li>
+							<li><a href=""><span class="glyphicon glyphicon-phone"></span>联系我们</a>
+							</li>
+						</ul></li>
+
+					<li id="login-text" class="login-text"><a
+						href="../user/ukeylogin">登录</a> <a href="">注册</a>
+					</li>
+
+					<!-- <li class="search" id="search"><input type="text"
+						name="search" id="search" value=""> <span
+						class="glyphicon glyphicon-search"></span> </input>
+						<button type="button" onclick="">搜索</button></li> -->
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+
+
+
+
+
+
+<div id="background_img" class="clearfix">
+    <img src="/ukey/image/背景.jpg" width="100%" height="512"/>
+</div>
+<div id="content" class="row clearfix">
+    <div id="content_bar" class="col-md-offset-1 col-md-10 content_bar">
+        <div class="content_bar1 col-md-3"></div>
+        <div class="content_bar2 col-md-6"></div>
+        <div class="content_bar3 col-md-3"></div>
+    </div>
+    <div id="title" class="col-md-10 col-md-offset-1">
+       
+    </div>
+
+    <ul id="response_ul" class="clearfix col-md-10 col-md-offset-1">
+
+    </ul>
+
+
+    <div id="content_newbar" class="col-md-offset-1 col-md-10 content_newbar">
+        <div class="content_bar1 col-md-3"></div>
+        <div class="content_bar2 col-md-6"></div>
+        <div class="content_bar3 col-md-3"></div>
+    </div>
+    <div class="fenye col-md-10 col-md-offset-1">
+        <span>共<span id="totallength">0</span>条回复，当前<span id = "currentpage">1</span>页，共<span id="totalpage">1</span>页</span>
+        <a class="next" onclick="nextpage()">下一页</a>
+        <a class="prve" onclick="prevpage()">上一页</a>
+
+    </div>
+
+    <div id="content_newbar_7" class="col-md-offset-1 col-md-10 content_newbar">
+        <div class="content_bar1 col-md-3"></div>
+        <div class="content_bar2 col-md-6"></div>
+        <div class="content_bar3 col-md-3"></div>
+    </div>
+    <div id="editor"  class="col-md-offset-1 col-md-10 editor">
+    </div>
+    <div id="publish" class="col-md-offset-1 col-md-10">
+        <button class="publish btn btn-primary" onclick="fabiao_fun(this);">发&nbsp;&nbsp;表</button>
+    </div>
+    <div class="col-md-offset-1 col-md-10 foot">
+        <span>2018 Ukey <a href="#">使用Ukey前必读</a>&nbsp;<a href="#">使用协议</a>&nbsp;
+        <a href="#">隐私政策</a>&nbsp;<a href="#">投诉反馈</a>信息网络视听许可证011656
+        </span>
+    </div>
+
+
+
+
+</div>
+</body>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    editor.customConfig.uploadFileName = 'file'
+    editor.customConfig.uploadImgServer = 'upload' // 上传图片到服务器
+    editor.customConfig.uploadImgMaxSize = 6 * 1024 * 1024
+    editor.customConfig.uploadImgMaxLength = 5
+    editor.customConfig.menus = [
+        'head',  // 标题
+        'fontSize',  // 字号
+        'fontName',  // 字体
+        'italic',  // 斜体
+        'underline',  // 下划线
+        'strikeThrough',  // 删除线
+        'foreColor',  // 文字颜色
+        'backColor',  // 背景颜色
+        'emoticon',  // 表情
+        'link',  // 插入链接
+        'list',  // 列表
+        'justify',  // 对齐方式
+        'image',  // 插入图片
+        'table',  // 表格
+    ]
+    editor.create();
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        $("#clear").click(function(){
+            editor.txt.clear();
+
+        });
+    });
+
+    function Onclick(){
+        var text = editor.txt.html();
+        $('#get_editor').val(text);
+    }
+</script>
+
+</html>
