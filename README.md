@@ -10,4 +10,4 @@
 
 ### 数据库E-R图
 
-![e-r图](https://github.com/AmazingPangWei/ukey/blob/master/ukey后台设计图.jpg)
+![e-r图](https://github.com/AmazingPangWei/ukey/blob/master/ukey后台设计图.png)
