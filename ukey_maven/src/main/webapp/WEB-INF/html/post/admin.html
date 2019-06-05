@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>管理员页面</title>
+	<link rel="stylesheet" href="/ukey_maven/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/ukey_maven/css/bootstrap.css" />
+<script src="/ukey_maven/js/jquery-3.3.1.min.js"></script>
+<script src="/ukey_maven/js/jquery-3.3.1.js"></script>
+<script src="/ukey_maven/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="/ukey_maven/css/public.css" />
+<style type="text/css">
+.all{
+	width: 1124px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.out_ul {
+	width: 100%;
+	height: auto;
+}
+
+.out_ul>li {
+	position: relative;
+
+}
+
+.in_ul {
+	width: 100%;
+}
+
+.in_ul>li {
+	width: 15%;
+	float: left;
+	height: 40px;
+	/*line-height: 40px;*/
+	border: solid 0.5px;
+	font-size: 18px;
+	text-align: center;
+}
+
+
+</style>
+<script type="text/javascript">
+		/*删除操作*/
+	function HandleReport(rpid){
+		$.ajax({
+			url : "../report/handleReport",
+			contentType : "application/json; charset=utf-8", //数据格式
+			type : "POST",
+			data:JSON.stringify({"rpid":rpid}),
+			async : false,
+			dataType : "json",
+			success : function(r) {
+				if(r["result"]){
+				console.log("删除成功：");
+				console.log(r);
+				window.location.reload();
+				}
+				
+			},
+			error: function(r){
+				console.log("error");
+			},
+			complete:function(r){
+				console.log("complete");
+			}
+		});
+	}
+
+		/*忽略操作*/
+	function IgnoreReport(rpid){
+		$.ajax({
+			url : "../report/ignoreReport",
+			contentType : "application/json; charset=utf-8", //数据格式
+			type : "POST",
+			data:JSON.stringify({"rpid":rpid}),
+			async : false,
+			dataType : "json",
+			success : function(r) {
+				console.log("f返回忽略：");
+				console.log(r);
+				if(r["result"]){
+				console.log("忽略成功：");
+				console.log(r);
+				window.location.reload();
+				}
+			},
+			error: function(r){
+				console.log("error");
+			},
+			complete:function(r){
+				console.log("complete");
+			}
+		});
+	}
+
+	 $(function(){
+	  	GetUnDoneReportList();
+	  });
+
+// 请求未处理举报列表
+function GetUnDoneReportList(){
+
+	$.ajax({
+		url : "../report/listUnhandleReport",
+		contentType : "application/json; charset=utf-8", //数据格式
+		type : "POST",
+		
+		data:null,
+		
+		async : false,
+		
+		dataType : "json",
+		
+		success : function(data) {
+			console.log(data);
+			var length = data["length"];
+			for (var i = 0; i < length; i++) {
+				var elem = data[i];
+				var rpid = elem["rpid"];
+				// console.log("rpid:"+rpid);
+				var $out_ul = $("#out_ul");
+				var $clone_li = $("#clone_li").clone(false);
+					console.log($clone_li.children().children()[0]);
+					var $in_ul = $clone_li.children().children();
+						$in_ul.eq(0).html(elem["rpid"]);
+						$in_ul.eq(1).html(elem["uname"]);
+						$in_ul.eq(2).html(elem["reason"]);
+						$in_ul.eq(3).html(elem["message"]);
+						$in_ul.eq(4).children().attr("id",elem["rpid"]);
+						$in_ul.eq(5).children().attr("id",elem["rpid"]);
+						console.log($in_ul.eq(4).children());
+				$out_ul.append($clone_li);
+
+
+			}
+			
+		},
+		
+		error: function(r){
+			console.log("error");
+		},
+		
+		complete:function(r){
+			console.log("complete");
+		}
+	});
+
+
+
+
+}
+
+</script>
+</head>
+<body>
+	<div class="all">
+		<ul class="out_ul" id="out_ul">
+			<li id="clone_li">
+				<ul class="in_ul">
+					<li>举报id</li>
+					<li>被举报人的名字</li>
+					<li>被举报的理由</li>
+					<li>被举报的内容</li>
+					<li><button id="" onclick="HandleReport(this.id)">删除</button></li>
+					<li><button id="" onclick="IgnoreReport(this.id)">忽略</button></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

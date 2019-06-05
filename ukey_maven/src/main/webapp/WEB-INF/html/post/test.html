@@ -8,10 +8,10 @@
 	 $(function(){
 	      $("#b").click(function(){
 	    	  $.ajax({
-	              url: '../user/signin',
+	              url: '../report/listReport',
 	              contentType: "application/json; charset=utf-8", //数据格式
 	              data:JSON.stringify(
-	            		  {"email":"798004868@qq.com","password":"123456789"}
+	            		  {"page":1}
 	              ),
 	              type: "POST",
 	              dataType: "json",

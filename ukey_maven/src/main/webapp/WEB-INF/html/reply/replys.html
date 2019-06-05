@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/ukey/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/ukey_maven/css/bootstrap.css"/>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="/ukey/js/wangEditor.min.js"></script>
-    <script src="/ukey/js/template-web.js" th:src="@{/js/template-web.js}" charset="utf-8"></script>
-   	<link rel="stylesheet" href="/ukey/css/comment.css"/>
-   	<link rel="stylesheet" type="text/css" href="/ukey/css/public.css" />
+    <script src="/ukey_maven/js/wangEditor.min.js"></script>
+    <script src="/ukey_maven/js/template-web.js" th:src="@{/js/template-web.js}" charset="utf-8"></script>
+   	<link rel="stylesheet" href="/ukey_maven/css/comment.css"/>
+   	<link rel="stylesheet" type="text/css" href="/ukey_maven/css/public.css" />
    	
 
    <script type="text/html" id="test">
@@ -34,6 +34,7 @@
                         <span class="date">
                          {{date}}
                         </span>
+						<button class="report" onclick = "ajaxreport()">举报</button>
                         <button id={{button_id}} class="response" data-toggle="collapse" data-target={{phuifu_aid}} onclick=
                                 "rsbtn_click(this)">
                             收起回复
@@ -141,8 +142,8 @@
             
         });
         
-        function hasUser(){
-        	console.log("7");
+        function hasUser(){					//判断用户是否存在
+        	//console.log("7");
         	 $.ajax({
                  url:"../user/nowUser",
                  contentType: "application/json; charset=utf-8", //数据格式               
@@ -150,8 +151,8 @@
                  dataType: "json",
                  async:false,
                  success: function(r) {
-                	 console.log(r);
-                	 console.log("777777");
+                	 //console.log(r);
+                	// console.log("777777");
                 	 if(r.uid==0){
                 		editor.$textElem.attr('contenteditable', false); 
                 	 	$("textarea").attr("disabled","disabled");              	
@@ -166,7 +167,7 @@
         
         
         
-        function fabiao_fun(btn){
+        function fabiao_fun(btn){					//最后发表评论处理的ajax请求函数
         	 var mypid=GetQueryString("pid");
         	  var page = $("#currentpage").html();
         	 var message = editor.txt.html();
@@ -183,14 +184,14 @@
                  success: function(r) {
                 	 $("#response_ul").html("");
                 	 ajaxfun(mypid,page);
-                	 $("#editor").html("");
+                	 editor.txt.html("");
                  	}
                  });
         	
         	
         	
         }
-        function fabiao_fun2(btn){
+        function fabiao_fun2(btn){			//针对每条评论而发表评论的ajax请求函数
        	 var mypid=GetQueryString("pid");
        	  var page = $("#currentpage").html();
        	 var message = $(btn).prev().val();
@@ -220,9 +221,7 @@
         
         
         function clickmore(btn){
-        	$(btn).parent().hide();
-        	
-        	
+        	$(btn).parent().hide();      	
         }
         
         function GetQueryString(name)
@@ -236,7 +235,7 @@
                 return  unescape(r[2]);
             return null;
         }
-        function rsbtn_click(btn){
+        function rsbtn_click(btn){				//点击展开回复后的处理，
         	console.log($(btn).parents('.louzhu').next().children(".huifu_box").eq(0));
             if($(btn).parents('.louzhu').next().css("display")!="none") {
             	 $(btn).css("background", "none");                        
@@ -244,7 +243,7 @@
              //   $(btn).parents('.louzhu').next().children(".countresponse").eq(0).children(".count_huifu").eq(0).css("visibility","hidden");
             }
             else {
-            	 console.log("ins");               
+            	 //console.log("ins");               
                 $(btn).css("background", "#fad8bf");
                 $(btn).html("收起回复");
                var text_height2 = $("div.response_img").height()+"px";
@@ -255,7 +254,7 @@
                
             }
           }
-        function nextpage(){
+        function nextpage(){			//分页操作，下一页
         	$(".prve").attr("disabled",false);
         	$(".prve").attr("style","cursor: auto");
         	$(".prve").html('<i class="edit" style="opacity: 1">上一页</i>');   
@@ -280,7 +279,7 @@
         		ajaxfun(mypid,currentpage);
         	}			
         }
-        function prevpage(){
+        function prevpage(){			//分页操作，上一页
         	$(".next").attr("disabled",false);
         	$(".next").attr("style","cursor: auto");
         	$(".next").html('<i class="edit" style="opacity: 1">下一页</i>');      
@@ -305,16 +304,16 @@
         	}
         					
         }
-        function total(r){
+        function total(r){//计算需要分的页数，6条评论为一页
         	var totallength;
         	totallength =r.tatalReply; 
-        	console.log("totallength"+totallength);
+        	//console.log("totallength"+totallength);
             $("#totallength").html(totallength);
             if(totallength % 6==0)
          	   totalpage=parseInt(totallength/6);
             else
          	   totalpage=parseInt(totallength/6)+1;  
-            console.log("totalpage"+totalpage);
+            //console.log("totalpage"+totalpage);
             $("#totalpage").html(totalpage);
         	
         }    
@@ -326,8 +325,8 @@
         	 var count = mylength;
         	 console.log(mylength);       	
             // console.log(list.comments[0]);   
-        	 if(mylength>4){
-          		 console.log("test");
+        	 if(mylength>4){				//每条评论贴下得回帖数是否大于4，如果大于，需要进行相关的操作
+          		 //console.log("test");
           			count = parseInt(count) - 4;  
           		   mylength=4;         		     		    
           		 //console.log(count);
@@ -349,6 +348,9 @@
           	   for(var k = 4; k>3&&k<list.comments.length;k++){
           		 var huifu_uid = list.comments[j].user.uid;
           		 var huifu_url = "../user/userinfo?uid="+huifu_uid;
+          		 console.log(77);
+          		 console.log(list.comments[k].user);
+          		 console.log(list.comments[k].user.uname);
          	   		var data2={
          	   				rname:list.comments[k].user.uname,
          				   message:list.comments[k].message, 
@@ -360,7 +362,6 @@
             			document.getElementById(phuifu_id).innerHTML +=html2;         			         								                		            		
             		}//end for  
             		    	
-            		
           		  var data3={
 						toosay:toosay,
 						toosay_pid,toosay_pid,
@@ -370,12 +371,11 @@
 						
 					}
 					 var html3 = template('html_shuru',data3); 
-             		
-             		console.log(huifu_aid+"11111");
+             		//console.log(huifu_aid+"11111");
             	 	document.getElementById(huifu_aid).innerHTML +=html3;	
         	
         }
-        function log_out(){
+        function log_out(){//登出
         	 $.ajax({
                  url:"../user/logout",
                  contentType: "application/json; charset=utf-8", //数据格式
@@ -389,7 +389,7 @@
                  }
              });	
         }
-        
+        //发出回复贴的ajax请求并且进行处理，即将数据填入模板中去
         function ajaxfun(mypid,page){
         	 $.ajax({
                  url:"../reply/listReply",
@@ -403,12 +403,11 @@
                  success: function(r) {
                     var listReply = eval(r.listReply);               
                     var i;
-                    
-                   total(r);
+                   total(r);//计算总的页数
                     for( i = 0; i<listReply.length; i++){
                     	window.rid[i] = listReply[i].rid;
-                    	console.log(window.rid[i]);
-                        console.log(listReply[i]);
+                    	//console.log(window.rid[i]);
+                       // console.log(listReply[i]);
                        // console.log(listReply[i].user.image_path);
                         var huifu = "huifu_box"+listReply[i].rid;
                         var button_id ="response"+i; 
@@ -423,7 +422,9 @@
                         var phuifu_aid = "#"+huifu_aid;
                         var textarea = "textarea"+i;
                         var uid = listReply[i].uid;
-                        var userurl = "../user/userinfo?uid="+uid;                       
+                        var userurl = "../user/userinfo?uid="+uid; 
+                        console.log("date+");
+                        console.log(listReply[i].date);
                         var data ={
                                 title:(page-1)*6+i+1,
                                 userurl:userurl,
@@ -443,19 +444,19 @@
                        		document.getElementById("title").innerHTML = r.title; 
                         	document.getElementById("response_ul").innerHTML +=html1; 
                         	document.getElementById(textarea).innerHTML =listReply[i].message;
-                        	console.log(listReply[i].message);
-                              zhankai(listReply[i],huifu,toosay,toosay_pid,count_huifu_id,huifu_aid,phuifu_id,pahuifu_id);                           
+                        	//console.log(listReply[i].message);
+                              zhankai(listReply[i],huifu,toosay,toosay_pid,count_huifu_id,huifu_aid,phuifu_id,pahuifu_id); //点击展开后显示评论贴的内容                          
                               
-                              if(listReply[i].comments.length>4){
+                              if(listReply[i].comments.length>4){//控制一个评论下的评论的展开与收起
                       	 		$(pcount_huifu_id).css("visibility","visible");
-                      	 		console.log("debug");           	 		
+                      	 		//console.log("debug");           	 		
                       	 	}
                       	 	else{
                       	 		$(pcount_huifu_id).css("visibility","hidden");
-                      			console.log("debug1");
+                      			//console.log("debug1");
                       	 	}
                               
-            					 var text_height = $(".louzhu_img").height()+"px";
+            					  var text_height = $(".louzhu_img").height()+"px";
             		                console.log(text_height);
             		                $(".text_area").css("min-height",text_height);
            		 
@@ -470,7 +471,76 @@
         	
         	
         }
-
+        function ajaxreport(){
+        	$("#report-box").removeClass("hidden");
+        	
+       	 	$.ajax({
+                url:"../report/listReportReason",
+                contentType: "application/json; charset=utf-8", //数据格式
+                type: "POST",
+                dataType: "json",
+                success: function(r) {
+                		//console.log(r);
+                		var i;
+                		for( i = 0; i<r.length; i++){
+                			 var elem_li = document.createElement('li'); // 生成一个 li元素
+                			 var id = "reoprt_li_id"+r[i].reasonId;
+                			 elem_li.setAttribute("id",id);
+                			elem_li.setAttribute("class","report_li");
+                			elem_li.onclick=function(){
+                				chooseli(this);
+                			}
+                			elem_li.innerHTML = r[i].reason;
+                		     document.getElementById('report-box-ul').appendChild(elem_li); // 添加到UL中去   			
+                			
+                		} 
+                		
+                
+                
+                }
+                
+       	 
+       	 });
+        }
+        
+        function chooseli(chooli){
+        	$("#report-box-ul>li").css("background-color","#f2f2f5");
+        	$("#report-box-ul>li").removeClass("checked");
+        	$(chooli).addClass("checked");
+        	$(chooli).css("color","#ff6d82");
+        	       	
+        }
+        
+        
+        function insertreport(){
+        	 var rid = parseInt($(".report").parents(".response_box").children(".count_floor").eq(0).html())-1; 
+        	//console.log(window.rid[rid]);
+        	var strid = $(".checked").attr('id');
+        	var reasonid = parseInt(strid.substr(strid.length-1,1));
+        	//console.log(reasonid);
+       	 	$.ajax({
+                url:"../report/insertReport",
+                contentType: "application/json; charset=utf-8", //数据格式
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    "uid": window.uid,
+                    "rid": window.rid[rid],
+                    "reasonId": reasonid,
+                }),
+                success: function(key) {
+                	//console.log(key.result='true');
+                	if(key.result = "true")
+                		 window.location.href ="../index"; //跳转到成功页面             	
+                }
+                });
+        }
+        
+        function cancelNote(){
+        	$("#report-box-ul").html(" ");
+        	$("#report-box").addClass("hidden");
+        	
+        }
 
 
 
@@ -492,7 +562,7 @@
 					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<img class="navbar-brand" src="/ukey/image/LOGO160-60.png" />
+				<img class="navbar-brand" src="/ukey_maven/image/LOGO160-60.png" />
 			</div>
 			<div class="collapse navbar-collapse" id="example-navbar-collapse">
 				<ul id="nav" class="nav navbar-nav">
@@ -531,7 +601,7 @@
 
 					<li id="user" class="dropdown user hidden"><a href="#"
 						class="dropdown-toggle no_padding" data-toggle="dropdown"> <img
-							id="user-logo" class="user-logo" src="/ukey/image/timg.jpg"><b
+							id="user-logo" class="user-logo" src="/ukey_maven/image/timg.jpg"><b
 							class="caret"></b>
 					</a>
 						<ul class="dropdown-menu">
@@ -571,7 +641,7 @@
 
 
 <div id="background_img" class="clearfix">
-    <img src="/ukey/image/背景.jpg" width="100%" height="512"/>
+    <img src="/ukey_maven/image/背景.jpg" width="100%" height="512"/>
 </div>
 <div id="content" class="row clearfix">
     <div id="content_bar" class="col-md-offset-1 col-md-10 content_bar">
@@ -616,6 +686,14 @@
         </span>
     </div>
 
+	<div class="report-box hidden" id="report-box">
+		<div class="report-note-box">
+			<ul id="report-box-ul">
+			</ul>
+			<button id = "cancel" class="btn btn-danger cancel" onclick="cancelNote()" value="取消">取消</button>
+			<button id = "submitreport" class="btn btn-success submitreport"  onclick="insertreport()" value="提交">提交</button>
+		</div>
+	</div>
 
 
 

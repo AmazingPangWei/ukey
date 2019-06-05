@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" href="/ukey_maven/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/ukey_maven/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ukey_maven/css/bootstrap.min_p.css">
+<script src="/ukey_maven/js/jquery-3.3.1.min.js"></script>
+<script src="/ukey_maven/js/jquery-3.3.1.js"></script>
+<script src="/ukey_maven/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ukey_maven/js/jq-paginator.js"></script>
+<link rel="stylesheet" type="text/css" href="/ukey_maven/css/public.css" />
+<title></title>
+</head>
+<style type="text/css">
+ul, li {
+	list-style: none;
+}
+
+.index {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.navbar {
+	height: 50px;
+	border-bottom: solid 2px black;
+}
+
+.navbar-brand {
+	padding-left: 20px;
+	padding-right: 20px;
+	width: 200px;
+	height: 46px;
+}
+
+.dropdown-menu {
+	width: 120px;
+	min-width: 120px;
+	background-color: rgba(222, 222, 222, 0.8);
+	color: rgb(88, 88, 88);
+}
+
+.navbar-collapse {
+	height: 50px;
+	width: 100%;
+}
+
+li.user {
+	float: right;
+	margin-top: 5px;
+}
+
+li.user>a {
+	padding: 0 0 0 15px;
+}
+
+/*jia*/
+li.login-text {
+	float: right;
+}
+
+li.login-text>a {
+	float: left;
+}
+
+.collapse>ul>li>a, .dropdown-menu>li>a {
+	cursor: pointer;
+	color: white;
+}
+
+.dropdown-menu>li>a:visited, .collapse>ul>li>a:visited {
+	cursor: none;
+}
+
+.dropdown-menu>li>a>span {
+	vertical-align: middle;
+	margin-right: 12px;
+}
+
+li.search {
+	position: relative;
+	/*jia*/
+	float: right;
+}
+
+li.search>input {
+	margin-top: 8px;
+	width: 180px;
+	min-width: 140px;
+	height: 28px;
+	border-radius: 2px;
+}
+
+li.search>span {
+	position: absolute;
+	right: 46px;
+	top: 16px;
+	color: rgb(223, 223, 223);
+	cursor: pointer;
+}
+
+li.search>button {
+	width: 40px;
+	height: 26px;
+	border: none;
+	border-radius: 4px;
+	background-color: rgb(34, 34, 34);
+	color: white;
+}
+
+.user-logo {
+	width: 40px;
+	height: 40px;
+}
+
+.image {
+	height: 350px;
+	background: url(/ukey_maven/image/1366-507.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.rtimage {
+	height: 160px;
+	width: 300px;
+	float: right;
+	background: url(/ukey_maven/image/主题语490-266.png) no-repeat;
+	background-size: 100% 100%;
+	margin: 80px;
+}
+
+.content {
+	height: 820px;
+	background: linear-gradient(to bottom, rgb(58, 70, 102),
+		rgb(86, 94, 140));
+}
+
+.contmain {
+	position: relative;
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.one {
+	margin: 0 auto;
+	width: 900px;
+	height: 50px;
+	color: rgb(58, 70, 102);
+	background-color: #F5F5F5;
+	font-family: "microsoft yahei";
+	text-align: center;
+	font-size: 20px;
+	font-weight: bolder;
+	line-height: 50px;
+}
+
+.two {
+	width: 1000px;
+	min-height: 560px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.two>ul>li>ul>li {
+	line-height: 27px;
+	border: 1px solid;
+	border-color: whitesmoke;
+	text-align: center;
+	color: #F9F9F9;
+}
+
+/* 此处需要修改 */
+.two>ul {
+	margin-left: 50px;
+}
+
+.out_ul in_ul:first-child {
+	background: lightpink;
+}
+
+.out_ul {
+	width: 100%;
+	height: auto;
+}
+
+.out_ul>li {
+	position: relative;
+}
+
+.in_ul {
+	width: 100%;
+}
+
+.in_ul>li {
+	width: 30%;
+	float: left;
+	text-align: center;
+}
+
+.three {
+	width: 100%;
+	height: 200px;
+	background: url(/ukey_maven/image/页尾图1366-390.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.button {
+	position: relative;
+	margin: 0 auto;
+	width: 520px;
+}
+
+.button>li {
+	width: 100px;
+	margin-left: 48px;
+	float: left;
+}
+
+.button>li>button {
+	background: lightpink;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 800;
+	line-height: 44px;
+	width: 100px;
+	border: none;
+	border-radius: 3px;
+	height: 44px;
+	color: rgb(58, 70, 102);
+}
+
+.bottom {
+	width: 1140px;
+	height: 30px;
+	background: grey;
+	margin: 0 auto;
+	line-height: 30px;
+}
+
+.bottom ul {
+	text-align: center;
+}
+
+.bottom ul>li, p {
+	display: inline-block;
+}
+
+.bottom a {
+	text-decoration: none;
+	color: #00008B;
+}
+</style>
+<script type="text/javascript">
+	//当前页码
+	var Page = 1;
+	var MaxPage = 1;
+	/*获取当前登录用户*/
+	function getNowUser() {
+		$.ajax({
+			url : "../user/nowUser",
+			data : null,
+			contentType : "aplication/json; charset=utf-8",
+			dataType : "json",
+			async : false,
+			success : function(result) {
+				console.log("----------");
+				console.log(result["uid"]);
+				if (result["uid"] != 0) {
+					user = result;
+				}
+			}
+		});
+	}
+
+	/*退出登录*/
+	function log_out() {
+		console.log(12344);
+		$.ajax({
+			url : "../user/logout",
+			contentType : "application/json; charset=utf-8", //数据格式
+			type : "POST",
+			async : false,
+			dataType : "json",
+			success : function(r) {
+				if (r.result) {
+
+					self.location = '../message?code=5';
+				}
+			},
+			error : function(r) {
+				console.log("error");
+			},
+			complete : function(r) {
+				console.log("complete");
+			}
+		});
+	}
+
+	$(function() {
+
+		/*得到当前用户*/
+		getNowUser();
+		/*初始化导航栏*/
+		navLoad();
+		//获得举报帖子列表
+		GetReportList(Page);
+
+	})
+
+	/*改变帖子类型*/
+	function changeClass(class_name) {
+		var class_id;
+		if (class_name == "second_hand_business") {
+			class_id = 5;
+		} else if (class_name == "lost_and_found") {
+			class_id = 2;
+		} else if (class_name == "search_for_friends") {
+			class_id = 3;
+		} else if (class_name == "daily_dynamics") {
+			class_id = 1;
+		} else if (class_name == "game_discussion") {
+			class_id = 7;
+		}
+		console.log("---" + class_id);
+		var ourl = "http://localhost:8080/ukey_maven/post/posts?page=1&class_id="
+				+ class_id;
+		window.location.href = ourl;
+
+	}
+	/* 跳到个人资料去 */
+	function userInfo() {
+		window.location.href = "../user/userinfo?uid=" + user["uid"];
+	}
+
+	/*初始化navbar*/
+	function navLoad() {
+		var w = document.body.clientWidth - 30;
+		console.log("前面：" + w);
+		$("#example-navbar-collapse").width(w);
+		w = w - 230;
+		console.log("后面" + w);
+		$("#nav").width(w);
+
+		if (user != null) {
+			console.log("当前user：" + user["image_path"]);
+			$("#user-logo").attr("src", user["image_path"]);
+			$("#login-text").addClass("hidden");
+			$("#user").removeClass("hidden");
+		}
+	};
+	//上一页
+	function LastPage() {
+		if (Page == 1) {
+			alert("已经是第一页");
+		} else {
+			Page = Page - 1;
+			//获得举报帖子列表
+			GetReportList(Page);
+		}
+	}
+	//下一页
+	function NextPage() {
+		if (Page == MaxPage) {
+			alert("已经是最后一页啦");
+		} else {
+			Page = Page + 1;
+			//获得举报帖子列表
+			GetReportList(Page);
+		}
+	}
+
+	// 请求举报列表
+	function GetReportList(page) {
+
+		$
+				.ajax({
+					url : "../report/listReport",
+					contentType : "application/json; charset=utf-8", //数据格式
+					type : "POST",
+
+					data : JSON.stringify({
+						"page" : page
+					}),
+
+					async : false,
+
+					dataType : "json",
+
+					success : function(data) {
+						console.log("data:");
+						console.log(data);
+
+						//得到最大的页数
+						MaxPage = Math.ceil(parseInt(data["total"] / 20) + 1);
+
+						console.log(data["total"]);
+						console.log("MaxPage:" + MaxPage);
+
+						if (data["reports"] != null) {
+
+							var total = data["total"];
+
+							console.log("total:" + total);
+							var reports = data["reports"];
+							$out_ul = $("#out_ul");
+							$out_ul.empty();
+
+							$out_ul
+									.html("<li id='clone_li'><ul class='in_ul'><li>昵称</li><li>违规类型</li><li>违规日期</li></ul></li>");
+							for (var i = 0; i < total; i++) {
+
+								var $Elem =$("#clone_li").clone(false);
+								//console.log($Elem);
+								var $first_li = $Elem.children().children().eq(
+										0);
+								
+								$first_li.html(reports[i]["uname"]);
+								console.log(reports[i]["uname"]);
+								var $second_li = $Elem.children().children()
+										.eq(1);
+								$second_li.html(reports[i]["reason"]);
+								var $third_li = $Elem.children().children().eq(
+										2);
+								$third_li.html(reports[i]["date"]);
+								
+								
+								$("#out_ul").append($Elem);
+							}
+
+						} else {
+
+						}
+					},
+
+					error : function(r) {
+						console.log("error");
+					},
+
+					complete : function(r) {
+						console.log("complete");
+					}
+				});
+	}
+</script>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-default no_margin-bottom"
+		role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<img class="no_padding navbar-brand"
+					src="/ukey_maven/image/LOGO160-60.png" />
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<ul id="nav" class="nav navbar-nav">
+					<li><a id="" href="../index">首页</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> 功能中心<b class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a id="second_hand_business"
+								onclick="changeClass(this.id)"> <span
+									class="
+								glyphicon glyphicon-retweet"></span>二手交易
+							</a></li>
+							<li><a id="lost_and_found" onclick="changeClass(this.id)">
+									<span class="
+								glyphicon glyphicon-inbox"></span>失物招领
+							</a></li>
+							<li><a id="search_for_friends"
+								onclick="changeClass(this.id)"> <span
+									class="
+								glyphicon glyphicon-hand-right"></span>寻找研友
+							</a></li>
+							<!-- <li class="divider"></li> -->
+							<li><a id="daily_dynamics" onclick="changeClass(this.id)">
+									<span class="
+								glyphicon glyphicon-comment"></span>日常动态
+							</a></li>
+							<!-- <li class="divider"></li> -->
+							<li><a id="game_discussion" onclick="changeClass(this.id)">
+									<span class="glyphicon glyphicon-heart"></span>游戏讨论
+							</a></li>
+						</ul></li>
+
+					<li><a id="">社团咨询</a></li>
+					<li><a id="">关于我们</a></li>
+					<li><a id="">联系我们</a></li>
+
+					<li id="user" class="dropdown hidden user"><a href="#"
+						class="dropdown-toggle no_padding" data-toggle="dropdown"> <img
+							id="user-logo" class="user-logo" src="/ukey_maven/image/timg.jpg"><b
+							class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a onclick="userInfo()"><span
+									class="glyphicon glyphicon-user"></span>个人资料</a></li>
+							<li><a href="../user/change_password"><span
+									class="glyphicon glyphicon-trash"></span>修改密码</a></li>
+							<li><a href=""><span
+									class="glyphicon glyphicon-envelope"></span>收到私信</a></li>
+							<li><a onclick="log_out()"><span
+									class="glyphicon glyphicon-off"></span>退出登录</a></li>
+							<li class="divider"></li>
+							<li><a href=""><span class="glyphicon glyphicon-star"></span>关于我们</a>
+							</li>
+							<li><a href=""><span class="glyphicon glyphicon-phone"></span>联系我们</a>
+							</li>
+						</ul></li>
+					<!-- jia -->
+					<li id="login-text" class="login-text"><a
+						href="../user/ukeylogin">登录</a> <a href="../user/registe">注册</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="index">
+		<div class="header"></div>
+		<div class="container">
+			<div class="image">
+				<div class="rtimage"></div>
+			</div>
+			<div class="content">
+				<div class="contmain clear">
+					<div class="one">Ukey违规用户处理名单(2019.05)</div>
+					<div class="two clear">
+						<ul class="out_ul" id="out_ul">
+							<li id="clone_li">
+								<ul class="in_ul">
+									<li>昵称</li>
+									<li>违规类型</li>
+									<li>违规日期</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="three">
+					<ul class="button">
+						<li><button onclick="LastPage()">上一页</button></li>
+						<li><button onclick="NextPage()">
+								下一页
+								</btton></li>
+						<li><button onclick="window.location='admin.html'">管理员界面</button></li>
+					</ul>
+				</div>
+			</div>
+			<div class="bottom">
+				<ul>
+					<li>
+						<p>2018Ukey</p>
+					</li>
+					<li><a href="#">使用Ukey必读</a></li>
+					<li><a href="#">使用协议</a></li>
+					<li><a href="#">隐私政策</a></li>
+					<li><a href="#">投诉反馈</a></li>
+					<li>
+						<p>信息网络视听许可证011656</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+</body>
+
+</html>

@@ -7,15 +7,15 @@
 <meta http-equiv="Access-Control-Allow-Origin" content="*">
 <link rel="stylesheet"
 	href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="/ukey/css/bootstrap.css" />
+<link rel="stylesheet" href="/ukey_maven/css/bootstrap.css" />
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 <script
 	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="/ukey/js/bootstrap-datetimepicker.min.js"></script>
-<script src="/ukey/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<link rel="stylesheet" href="/ukey/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="/ukey/css/userInfo.css">
-<link rel="stylesheet" href="/ukey/css/public.css">
+<script src="/ukey_maven/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/ukey_maven/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="/ukey_maven/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="/ukey_maven/css/userInfo.css">
+<link rel="stylesheet" href="/ukey_maven/css/public.css">
 
 </head>
 
@@ -171,8 +171,18 @@
 			 testsummary=$("#summary").val();		 
 			 console.log(testsummary);
 		});
+		$("#name").on('blur',function(){		 
+			 testname=$("#name").val();		 
+			 console.log(testname);
+		});
+		$("#academic").on('blur',function(){		 
+			 testacademic=$("#academic").val();		 
+			 console.log(testacademic);
+		});
 		$("#starttime").on('focus',function(){		 
 			$("#summary").val(testsummary);
+			$("#name").val(testname);
+			$("#academic").val(testacademic);
 		});
 		
 		
@@ -225,9 +235,10 @@
 			async : false,
 			success : function(r) {
 				var myselect = document.getElementById("academic");
-				var optionstring;
+				myselect.innerHTML = "<option value=\"" + 0 + "\" >"+ "</option>";
 
 				for (var i = 0; i < r.length; i++) {
+					var optionstring="";
 					var index = r[i].schoolid;
 					//console.log(index);
 					optionstring = "<option value=\"" + index + "\" >"
@@ -276,6 +287,7 @@
 				console.log(date2);
 				var days = daysBetween(window.register_date, date2)
 				console.log(days);
+				console.log(window.uname);
 				$(".user_name,#span_uname").html(window.uname);
 				$("#introduce_text").html(window.description);
 				$("#birthday").html(window.date);
@@ -283,10 +295,10 @@
 				$("#email_box").html(window.email);
 				$("#count_days").html(days);
 				if (r.sex == "男") {
-					$("#img_sex").attr("src", "/ukey/image/男性图标.png");
+					$("#img_sex").attr("src", "/ukey_maven/image/男性图标.png");
 				} else if (r.sex == "女") {
 					//console.log("女");
-					$("#img_sex").attr("src", "/ukey/image/性别女图标50-50.png");
+					$("#img_sex").attr("src", "/ukey_maven/image/性别女图标50-50.png");
 				}
 
 			}
@@ -319,7 +331,7 @@
 					<span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<img class="navbar-brand" src="/ukey/image/LOGO160-60.png" />
+				<img class="navbar-brand" src="/ukey_maven/image/LOGO160-60.png" />
 			</div>
 			<div class="collapse navbar-collapse" id="example-navbar-collapse">
 				<ul id="nav" class="nav navbar-nav">
@@ -358,7 +370,7 @@
 
 					<li id="user" class="dropdown user hidden"><a href="#"
 						class="dropdown-toggle no_padding" data-toggle="dropdown"> <img
-							id="user-logo" class="user-logo" src="/ukey/image/timg.jpg"><b
+							id="user-logo" class="user-logo" src="/ukey_maven/image/timg.jpg"><b
 							class="caret"></b>
 					</a>
 						<ul class="dropdown-menu">
@@ -391,17 +403,17 @@
 	</nav>
 	<div class="row">
 		<div class="top col-md-10 col-md-offset-1">
-			<img src="/ukey/image/上图背景1075-500.jpg" />
+			<img src="/ukey_maven/image/上图背景1075-500.jpg" />
 		</div>
 	</div>
 	<div class="row body">
 		<div class="content col-md-10 col-md-offset-1">
 			<div class="con_top clearfix">
-				<img class="userinfo_img" src="/ukey/image/头像185-185.png"
+				<img class="userinfo_img" src="/ukey_maven/image/头像185-185.png"
 					width="200" height="200" />
 				<div class="name_info clearfix">
 					<div class="name clearfix">
-						<img id="img_sex" class="userinfo_img" src="/ukey/image/男性图标.png"
+						<img id="img_sex" class="userinfo_img" src="/ukey_maven/image/男性图标.png"
 							width="50" height="50" /> <span class="user_name">冶风YF</span>
 					</div>
 					<div class="clearfix">
@@ -416,13 +428,13 @@
 			<div class="con_middle clearfix">
 				<ul class="clearfix">
 					<li onclick="click_fun(this)"><img class="userinfo_img"
-						src="/ukey/image/home.png" /> <a href="#">我的主页</a> <span
+						src="/ukey_maven/image/home.png" /> <a href="#">我的主页</a> <span
 						class="shuxian">|</span></li>
 					<li onclick="click_fun(this)"><img class="userinfo_img"
-						src="/ukey/image/sixin.png" /> <a href="#">私信</a> <span
+						src="/ukey_maven/image/sixin.png" /> <a href="#">私信</a> <span
 						class="shuxian">|</span></li>
 					<li onclick="click_fun(this)"><img class="userinfo_img"
-						src="/ukey/image/tie.png" /> <a href="#">帖子</a> <span
+						src="/ukey_maven/image/tie.png" /> <a href="#">帖子</a> <span
 						class="shuxian">|</span></li>
 
 
@@ -434,7 +446,7 @@
 				<div class="main_info clearfix">
 					<div class="body_navbar clearfix main_info_img">
 						<span> <span id="span_uname"></span>的个人信息
-						</span> <img class="userinfo_img" src="/ukey/image/头像185-185.png"
+						</span> <img class="userinfo_img" src="/ukey_maven/image/头像185-185.png"
 							width="200" height="200" />
 
 					</div>
@@ -444,7 +456,7 @@
 							<h1>个人介绍</h1>
 							<div id="introduce_text"></div>
 							<div class="introduce_img">
-								<img class="userinfo_img" src="/ukey/image/介绍卡图标280-280.png"
+								<img class="userinfo_img" src="/ukey_maven/image/介绍卡图标280-280.png"
 									width="280" height="280" />
 							</div>
 
@@ -453,25 +465,25 @@
 							<li class="clearfix">
 								<div class="clearfix">
 									生日：<span id="birthday"></span>
-								</div> <img class="userinfo_img" src="/ukey/image/生日卡图标170-135.png"
+								</div> <img class="userinfo_img" src="/ukey_maven/image/生日卡图标170-135.png"
 								width="170" height="135" />
 							</li>
 							<li class="clearfix">
 								<div class="clearfix">
 									学院：<span id="school"></span>
-								</div> <img class="userinfo_img" src="/ukey/image/学院卡图标170-135.png"
+								</div> <img class="userinfo_img" src="/ukey_maven/image/学院卡图标170-135.png"
 								width="155" height="125" />
 							</li>
 							<li class="clearfix">
 								<div class="clearfix">
 									累计天数：<span id="count_days"></span>
-								</div> <img class="userinfo_img" src="/ukey/image/兴趣卡图标170-135.png"
+								</div> <img class="userinfo_img" src="/ukey_maven/image/兴趣卡图标170-135.png"
 								width="170" height="135" />
 							</li>
 							<li class="clearfix">
 								<div class="clearfix">
 									邮件：<span id="email_box"></span>
-								</div> <img class="userinfo_img" src="/ukey/image/联系卡图标255-215.png"
+								</div> <img class="userinfo_img" src="/ukey_maven/image/联系卡图标255-215.png"
 								width="200" height="180 " />
 							</li>
 

@@ -15,6 +15,7 @@ import com.ukey.dao.AssociationDao;
 import com.ukey.dao.CommentDao;
 import com.ukey.dao.PostDao;
 import com.ukey.dao.ReplyDao;
+import com.ukey.dao.ReportDao;
 import com.ukey.dao.SchoolDao;
 import com.ukey.dao.TopDao;
 import com.ukey.dao.UserDao;
@@ -22,6 +23,9 @@ import com.ukey.pojo.Association;
 import com.ukey.pojo.Comment;
 import com.ukey.pojo.Post;
 import com.ukey.pojo.Reply;
+import com.ukey.pojo.Report;
+import com.ukey.pojo.ReportReason;
+import com.ukey.pojo.ReportResult;
 import com.ukey.pojo.School;
 import com.ukey.pojo.User;
 @Service
@@ -47,6 +51,9 @@ public class UkeyServiceImpl implements UkeyService
 	
 	@Autowired
 	private AssociationDao assDao;
+	
+	@Autowired
+	private ReportDao reportDao;
 	
 	@Transactional(readOnly=true)
 	@Override
@@ -237,6 +244,28 @@ public class UkeyServiceImpl implements UkeyService
 	
 	@Override
 	@Transactional
+	public boolean deleteReplyByReport(int rpid)
+	{
+		try
+		{
+			//得到将会被删掉的reply
+			Reply reply = reportDao.selectReportedReply(rpid);
+			//删掉这个reply从评论表中
+			reportDao.deleteReplyByRpid(rpid);
+			//将这个reply插入到trash中
+			reportDao.insertTrash(reply);
+			//处理完毕
+			reportDao.handleReport(rpid);
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	@Transactional
 	public boolean insertComment(Comment comment)
 	{
 		try
@@ -336,4 +365,72 @@ public class UkeyServiceImpl implements UkeyService
 		postDao.addReading(pid);
 	}
 	
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<ReportReason> listReportReason()
+	{
+		List<ReportReason> res = reportDao.listReportReason();
+		return res;
+	}
+	
+	@Override
+	@Transactional
+	public boolean insertReport(Report report)
+	{
+		try
+		{
+			reportDao.insertReport(report);
+			return true;
+		}
+		catch (Exception e){
+			return false;
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<ReportResult> listReport(int page)
+	{
+		List<ReportResult> res;
+		try
+		{
+			res = reportDao.listReport((page - 1) * 20);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+		return res;
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public int totalReport()
+	{
+		return reportDao.totalReport();
+	}
+	
+	@Override
+	@Transactional
+	public boolean handleReport(int rpid)
+	{
+		try
+		{
+			reportDao.handleReport(rpid);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<Map<String, Object>> listUnhandleReport()
+	{
+		return reportDao.listUnhandleReport();
+	}
 }

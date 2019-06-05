@@ -31,4 +31,10 @@ public class FromController
 		// 动态跳转页面
 		return "reply/"+formName;
 	}
+	
+	@RequestMapping(value="/report/{formName}")
+	 public String loginForm5(@PathVariable String formName){
+		// 动态跳转页面
+		return "report/"+formName;
+	}
 }

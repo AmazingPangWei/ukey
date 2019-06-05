@@ -6,6 +6,9 @@ import java.util.Map;
 import com.ukey.pojo.Comment;
 import com.ukey.pojo.Post;
 import com.ukey.pojo.Reply;
+import com.ukey.pojo.Report;
+import com.ukey.pojo.ReportReason;
+import com.ukey.pojo.ReportResult;
 import com.ukey.pojo.School;
 import com.ukey.pojo.User;
 
@@ -41,6 +44,7 @@ public interface UkeyService
 	
 	public List<Reply> listReply(int pid,int page);
 	
+	public boolean deleteReplyByReport(int rpid);
 	
 	public boolean insertComment(Comment comment);
 	
@@ -60,4 +64,15 @@ public interface UkeyService
 	
 	public void addReading(int pid);
 	
+	public List<ReportReason> listReportReason();
+	
+	public boolean insertReport(Report report);
+	
+	public List<ReportResult> listReport(int page);
+	
+	public int totalReport();
+	
+	public boolean handleReport(int rpid);
+	
+	public List<Map<String,Object>> listUnhandleReport();
 }

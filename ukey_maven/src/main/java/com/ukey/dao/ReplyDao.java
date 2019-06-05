@@ -61,4 +61,10 @@ public interface ReplyDao
 	
 	@Delete("delete from reply where pid = #{pid}")
 	void deleteReplyByPid(int pid);
+	
+	@Delete("delete from reply where rid = #{rid}")
+	void deleteReplyByRid(int rid);
+	
+	@Select("select * from reply where rid = #{rid}")
+	Reply selectReplyByRid(int rid);
 }

@@ -15,7 +15,7 @@ public class UserDynaSqlProvider
 				VALUES("email", "#{email}");
 				VALUES("password", "#{password}");
 				VALUES("typeid", "1");
-				VALUES("image_path", "\'/ukey/face/default.jpg\'");
+				VALUES("image_path", "\'/ukey_maven/face/default.jpg\'");
 				VALUES("uname", "\'不设置昵称的小懒虫\'");
 			}
 		}.toString();

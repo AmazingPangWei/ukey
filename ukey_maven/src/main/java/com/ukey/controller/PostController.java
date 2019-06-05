@@ -156,8 +156,11 @@ public class PostController
 	
 	@RequestMapping("/post/addReading")
 	@ResponseBody
-	void addReading(@RequestBody Map<String,Integer> map) {
+	Map<String,Boolean> addReading(@RequestBody Map<String,Integer> map) {
 		int pid = map.get("pid");
 		service.addReading(pid);
+		HashMap<String,Boolean> res = new HashMap<>();
+		res.put("result", true);
+		return res;
 	}
 }

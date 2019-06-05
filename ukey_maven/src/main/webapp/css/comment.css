@@ -154,7 +154,8 @@ li.search>button{
 .text_area{
     position: relative;
     float:left;
-    width: 90%;
+    width: 88%;
+    margin-left:2%;
 }
 .text_area>textarea{
     color: #000;
@@ -172,7 +173,7 @@ li.search>button{
     font-size: 16px;
     font-weight: bold;
     bottom: 0px;
-    right: 8%;
+    right: 12%;
 }
 .content_newbar{
     min-width: 1176px;
@@ -223,6 +224,17 @@ li.search>button{
     bottom: 0px;
     right: 0%;
     width: 6%;
+}
+.report{
+	border: none;
+    background: none;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0px;
+    right: 7%;
+    width: 3%;
+	
 }
 .response_box{
     border: 0.2em dashed #fff;
@@ -351,4 +363,63 @@ button{
     float: right;
     margin-bottom: 1%;
 }
+.w-e-text img{
+	width:10%;
+	heigth:10%;
+}
+.textarea img{
+	width:10%;
+	height:10%;
+}
 
+.report-box {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 99999;
+}
+
+.report-note-box {
+	width: 400px;
+	height: 444px;
+	margin: 60px auto;
+	background: #fff;
+	padding: 16px;
+	box-sizing: border-box;
+	font-size: 18px;
+	border-radius: 5px;
+}
+
+.report-note-box>ul>li {
+	background-color:#f2f2f5;
+	/* border:1px solid #000; */
+	text-align:center;
+	line-height:35px;
+	border-radius:5px;
+	width: 350px;
+	margin: 15px auto;
+}
+.cancel {
+	width: 100px;
+	height: 40px;
+	margin-left:10px;
+	background: #E0E0E0;
+	border: #E0E0E0;
+	color: #3d3d3d;
+}
+.submitreport{
+	width: 100px;
+	height: 40px;
+	float:right;
+	margin-right:15px;
+	background: #E0E0E0;
+	border: #E0E0E0;
+	color: #3d3d3d;
+}
+#report-box-ul>li:hover{
+	cursor:pointer;
+	color:#ff6d82;
+}
