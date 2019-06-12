@@ -491,12 +491,8 @@
                 				chooseli(this);
                 			}
                 			elem_li.innerHTML = r[i].reason;
-                		     document.getElementById('report-box-ul').appendChild(elem_li); // 添加到UL中去   			
-                			
-                		} 
-                		
-                
-                
+                		     document.getElementById('report-box-ul').appendChild(elem_li); // 添加到UL中去   			              			
+                		}      
                 }
                 
        	 
@@ -506,6 +502,7 @@
         function chooseli(chooli){
         	$("#report-box-ul>li").css("background-color","#f2f2f5");
         	$("#report-box-ul>li").removeClass("checked");
+        	$("#report-box-ul>li").css("color","#333");
         	$(chooli).addClass("checked");
         	$(chooli).css("color","#ff6d82");
         	       	
@@ -531,7 +528,7 @@
                 success: function(key) {
                 	//console.log(key.result='true');
                 	if(key.result = "true")
-                		 window.location.href ="../index"; //跳转到成功页面             	
+                		 window.location.href ="../message?code=7"; //跳转到成功页面             	
                 }
                 });
         }

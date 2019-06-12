@@ -1,7 +1,11 @@
 package com.ukey.pojo;
 
-public class User
+import java.io.Serializable;
+
+public class User implements Serializable
 {
+
+	private static final long serialVersionUID = 3689927668037128716L;
 	private int uid;
 	private String email;
 	private String password;

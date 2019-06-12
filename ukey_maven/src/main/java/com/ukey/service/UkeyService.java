@@ -75,4 +75,8 @@ public interface UkeyService
 	public boolean handleReport(int rpid);
 	
 	public List<Map<String,Object>> listUnhandleReport();
+	
+	public void flushIndex();
+	
+	public void updateCache(Post post);
 }

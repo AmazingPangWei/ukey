@@ -240,7 +240,15 @@ form {
 			function toVaild(){
 				var email = $("#email").val();
 				var password = $("#password").val();
-				if(email != null && email != "" && password != null && password != "")
+				var repassword = $("#repassword").val();
+				//console.log("#password;"+ password +"         #repassword;"+repassword);
+				//alert(1111111111);
+				if(password != repassword){
+					alert("前后密码不一样，请重新输入");
+					return false;
+				}
+				
+				if(email != null && email != "" && password != null && password != "" )
 				{
 					$.ajax({
 						url : "signin",
@@ -251,11 +259,14 @@ form {
 						dataType : "json",
 						success : function(result) {
 							if (result["result"]) {
-								window.location.href= "../message?code=1";
-									alert(111111);
-									
-								return false;
+								//self.location= "../message?code=1";
+								console.log("success");
+								self.location = '../message?code=1';
+								console.log("success2");
+								alert(11111111111);
+								return false;				
 							}else{
+								console.log(result);
 								self.location = '../message?code=6';
 								alert(111111);
 								}

@@ -153,14 +153,9 @@ public class PostController
 		List<Post> posts = service.searchPost(words);
 		return posts;
 	}
-	
 	@RequestMapping("/post/addReading")
-	@ResponseBody
-	Map<String,Boolean> addReading(@RequestBody Map<String,Integer> map) {
+	void addReading(@RequestBody Map<String,Integer> map) {
 		int pid = map.get("pid");
 		service.addReading(pid);
-		HashMap<String,Boolean> res = new HashMap<>();
-		res.put("result", true);
-		return res;
 	}
 }

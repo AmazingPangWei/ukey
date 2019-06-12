@@ -17,10 +17,10 @@
 			            http://mybatis.org/schema/mybatis-spring 
 			            http://mybatis.org/schema/mybatis-spring.xsd ">
 			      
-	 <!-- mybatis:scan会扫描org.fkit.dao包里的所有接口当作Spring的bean配置，之后可以进行依赖注入-->  
+	 <!-- mybatis:scan会扫描com.ukey.dao包里的所有接口当作Spring的bean配置，之后可以进行依赖注入-->  
     <mybatis:scan base-package="com.ukey.dao"/>   
        
-	 <!-- 扫描org.fkit包下面的java文件，有Spring的相关注解的类，则把这些类注册为Spring的bean -->
+	 <!-- 扫描com.ukey包下面的java文件，有Spring的相关注解的类，则把这些类注册为Spring的bean -->
     <context:component-scan base-package="com.ukey"/>
     
 	<!-- 使用PropertyOverrideConfigurer后处理器加载数据源参数 -->
@@ -40,5 +40,38 @@
 	
 	<!-- 启用支持annotation注解方式事务管理 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<context:property-placeholder location="classpath:redis.properties"/>
+	
+    <!-- 配置reids连接池 -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}" />
+        <property name="maxTotal" value="${redis.maxTotal}" />
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean>
+    <!-- 配置redis连接池工厂 -->
+    <bean id="jedisConnectionFactory"
+        class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+        destroy-method="destroy">
+        <property name="hostName" value="${redis.host}" />
+        <property name="port" value="${redis.port}" />
+        <property name="database" value="${redis.default.db}" />
+        <property name="timeout" value="${redis.timeout}" />
+        <property name="usePool" value="true" />
+        <property name="poolConfig" ref="poolConfig" />
+    </bean>
+    <!-- key序列化策略 -->
+    <bean id="keySerializer"  class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    <!-- value序列化策略 -->
+    <bean id="valueSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+    <!-- spring-redis模板 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="keySerializer" ref="keySerializer" />
+        <property name="valueSerializer" ref="valueSerializer" />
+        <!-- 配置redis是否支持事务 -->
+        <property name="enableTransactionSupport" value="true" />
+    </bean>	
 	
 </beans>

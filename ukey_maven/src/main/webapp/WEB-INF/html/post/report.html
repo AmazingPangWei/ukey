@@ -122,7 +122,7 @@ li.search>button {
 
 .image {
 	height: 350px;
-	background: url(/ukey_maven/image/1366-507.png) no-repeat;
+	background: url(/ukey_maven/image/主题图1366-507.png) no-repeat;
 	background-size: 100% 100%;
 }
 
@@ -260,6 +260,7 @@ li.search>button {
 	//当前页码
 	var Page = 1;
 	var MaxPage = 1;
+	var user = null;
 	/*获取当前登录用户*/
 	function getNowUser() {
 		$.ajax({
@@ -270,7 +271,8 @@ li.search>button {
 			async : false,
 			success : function(result) {
 				console.log("----------");
-				console.log(result["uid"]);
+				console.log(result["typeid"]);
+				
 				if (result["uid"] != 0) {
 					user = result;
 				}
@@ -346,12 +348,17 @@ li.search>button {
 		w = w - 230;
 		console.log("后面" + w);
 		$("#nav").width(w);
-
+		console.log("user:-----");
+		console.log(user);
 		if (user != null) {
 			console.log("当前user：" + user["image_path"]);
 			$("#user-logo").attr("src", user["image_path"]);
 			$("#login-text").addClass("hidden");
 			$("#user").removeClass("hidden");
+			if(user["typeid"]==2){
+				$("#toAdmin").removeClass("hidden");	
+			}
+			
 		}
 	};
 	//上一页
@@ -378,65 +385,63 @@ li.search>button {
 	// 请求举报列表
 	function GetReportList(page) {
 
-		$
-				.ajax({
-					url : "../report/listReport",
-					contentType : "application/json; charset=utf-8", //数据格式
-					type : "POST",
+		$.ajax({
+				url : "../report/listReport",
+				contentType : "application/json; charset=utf-8", //数据格式
+				type : "POST",
 
-					data : JSON.stringify({
-						"page" : page
-					}),
+				data : JSON.stringify({
+					"page" : page
+				}),
 
-					async : false,
+				async : false,
 
-					dataType : "json",
+				dataType : "json",
 
-					success : function(data) {
-						console.log("data:");
-						console.log(data);
+				success : function(data) {
+					console.log("data:");
+					console.log(data);
 
-						//得到最大的页数
-						MaxPage = Math.ceil(parseInt(data["total"] / 20) + 1);
+					//得到最大的页数
+					MaxPage = Math.ceil(parseInt(data["total"] / 20) + 1);
 
-						console.log(data["total"]);
-						console.log("MaxPage:" + MaxPage);
+					//console.log(data["total"]);
+					//console.log("MaxPage:" + MaxPage);
 
-						if (data["reports"] != null) {
+					if (data["reports"] != null) {
 
-							var total = data["total"];
+						//var total = data["total"];
 
-							console.log("total:" + total);
-							var reports = data["reports"];
-							$out_ul = $("#out_ul");
-							$out_ul.empty();
 
-							$out_ul
-									.html("<li id='clone_li'><ul class='in_ul'><li>昵称</li><li>违规类型</li><li>违规日期</li></ul></li>");
-							for (var i = 0; i < total; i++) {
+						//console.log("total:" + total);
+						var reports = data["reports"];
+						//console.log(reports["length"]);
+						var len = reports["length"];
+						$out_ul = $("#out_ul");
+						$out_ul.empty();
 
-								var $Elem =$("#clone_li").clone(false);
-								//console.log($Elem);
-								var $first_li = $Elem.children().children().eq(
-										0);
-								
-								$first_li.html(reports[i]["uname"]);
-								console.log(reports[i]["uname"]);
-								var $second_li = $Elem.children().children()
-										.eq(1);
-								$second_li.html(reports[i]["reason"]);
-								var $third_li = $Elem.children().children().eq(
-										2);
-								$third_li.html(reports[i]["date"]);
-								
-								
-								$("#out_ul").append($Elem);
-							}
+						$out_ul.html("<li id='clone_li'><ul class='in_ul'><li>昵称</li><li>违规类型</li><li>违规日期</li></ul></li>");
+						for (var i = 0; i < len; i++) {
 
-						} else {
-
+							var $Elem =$("#clone_li").clone(false);
+							//console.log($Elem);
+							var $first_li = $Elem.children().children().eq(
+									0);	
+							//console.log("uname:"+i+reports[i]["uname"]);	
+							$first_li.html(reports[i]["uname"]);
+							var $second_li = $Elem.children().children()
+									.eq(1);
+							$second_li.html(reports[i]["reason"]);
+							var $third_li = $Elem.children().children().eq(
+									2);
+							$third_li.html(reports[i]["date"]);
+							$("#out_ul").append($Elem);
 						}
-					},
+
+					} else {
+
+					}
+				},
 
 					error : function(r) {
 						console.log("error");
@@ -554,7 +559,7 @@ li.search>button {
 						<li><button onclick="NextPage()">
 								下一页
 								</btton></li>
-						<li><button onclick="window.location='admin.html'">管理员界面</button></li>
+						<li><button id="toAdmin" class="hidden" onclick="window.location='admin.html'">管理员界面</button></li>
 					</ul>
 				</div>
 			</div>

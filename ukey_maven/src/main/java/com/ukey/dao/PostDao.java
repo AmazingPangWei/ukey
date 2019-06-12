@@ -179,4 +179,7 @@ public interface PostDao
 	
 	@Select("select title from post where pid = #{pid}")
 	String postTitle(int pid);
+	
+	@Select("select * from post where pid = #{pid}")
+	Post getPostByPid(int pid);
 }

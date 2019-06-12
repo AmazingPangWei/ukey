@@ -1,7 +1,13 @@
 package com.ukey.pojo;
 
-public class School
+import java.io.Serializable;
+
+public class School implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6014997045894691610L;
 	private int schoolid;
 	private String sname;
 

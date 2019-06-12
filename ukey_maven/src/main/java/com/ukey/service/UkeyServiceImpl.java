@@ -55,6 +55,9 @@ public class UkeyServiceImpl implements UkeyService
 	@Autowired
 	private ReportDao reportDao;
 	
+	@Autowired
+	private CacheService cache;
+	
 	@Transactional(readOnly=true)
 	@Override
 	public Boolean ifUserExist(String email)
@@ -87,6 +90,8 @@ public class UkeyServiceImpl implements UkeyService
 	@Transactional
 	public void deletePost(int pid)
 	{
+		Post post = postDao.getPostByPid(pid);
+		updateCache(post);
 		List<Reply> replys = replyDao.listAllReply(pid);
 		//删除对回复的评论
 		for(Reply reply:replys) {
@@ -141,21 +146,14 @@ public class UkeyServiceImpl implements UkeyService
 	@Transactional(readOnly=true)
 	public Map<String, Object> indexInit()
 	{
-		List<Association> listAss = assDao.listAssciation();
-		List<Post> page1 = new LinkedList<>();
-		page1.add(postDao.secondHandPost());
-		page1.add(postDao.losePost());
-		page1.add(postDao.partnerPost());
-		page1.add(postDao.dynamicPost());
-		page1.add(postDao.gamePost());
-		List<Post> page2_1 = postDao.listLost();
-		List<Map<String,String>> page3 = userDao.listRank();
+		flushIndex();
 		Map<String,Object> map = new HashMap<>();
-		map.put("page1", page1);
-		map.put("page2_1", page2_1);
-		map.put("page2_2", listAss);
-		map.put("page3", page3);
+		map.put("page1", cache.cacheResult("page1"));
+		map.put("page2_1", cache.cacheResult("page2_1"));
+		map.put("page2_2", cache.cacheResult("page2_2"));
+		map.put("page3", cache.cacheResult("page3"));
 		map.put("page4", null);
+		System.out.println(map);
 		return map;
 	}
 	
@@ -172,6 +170,7 @@ public class UkeyServiceImpl implements UkeyService
 			reply.setPid(post.getPid());
 			reply.setUid(post.getUid());
 			replyDao.insertReply(reply);
+			updateCache(post);//刷新缓存
 			return true;
 		}
 		catch (Exception e)
@@ -362,6 +361,7 @@ public class UkeyServiceImpl implements UkeyService
 	@Transactional
 	public void addReading(int pid)
 	{
+		cache.cacheRemove("page3");//page3为排名，更新一下排名
 		postDao.addReading(pid);
 	}
 	
@@ -432,5 +432,42 @@ public class UkeyServiceImpl implements UkeyService
 	public List<Map<String, Object>> listUnhandleReport()
 	{
 		return reportDao.listUnhandleReport();
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public void flushIndex()
+	{
+		if(cache.cacheResult("page1") == null) {
+			List<Post> page1 = new LinkedList<>();
+			page1.add(postDao.secondHandPost());
+			page1.add(postDao.losePost());
+			page1.add(postDao.partnerPost());
+			page1.add(postDao.dynamicPost());
+			page1.add(postDao.gamePost());
+			cache.cachePut("page1", page1);
+		}
+		if(cache.cacheResult("page2_1") == null) {
+			List<Post> page2_1 = postDao.listLost();
+			cache.cachePut("page2_1", page2_1);
+		}
+		if(cache.cacheResult("page2_2") == null){
+			List<Association> listAss = assDao.listAssciation();
+			cache.cachePut("page2_2", listAss);
+		}
+		if(cache.cacheResult("page3") == null) {
+			List<Map<String,String>> page3 = userDao.listRank();
+			cache.cachePut("page3", page3);
+		}
+	}
+	
+	@Override
+	public void updateCache(Post post)
+	{
+		if(post.getClass_id() == 2) {
+			cache.cacheRemove("page2_1");
+		}
+		cache.cacheRemove("page1");
+		cache.cacheRemove("page3");
 	}
 }

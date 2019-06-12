@@ -1,7 +1,10 @@
 package com.ukey.pojo;
 
-public class Post
+import java.io.Serializable;
+
+public class Post implements Serializable
 {
+	private static final long serialVersionUID = -5863534758521306819L;
 	private int pid;
 	private int class_id;
 	private int uid;

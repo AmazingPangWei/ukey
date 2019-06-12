@@ -1,7 +1,10 @@
 package com.ukey.pojo;
 
-public class Association
+import java.io.Serializable;
+
+public class Association implements Serializable
 {
+	private static final long serialVersionUID = -2889403059939568495L;
 	private Integer aid;
 	private String email;
 	private String password;

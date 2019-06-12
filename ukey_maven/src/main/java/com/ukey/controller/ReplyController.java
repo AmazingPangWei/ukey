@@ -80,15 +80,17 @@ public class ReplyController
 			map.put("data", urls);
 			return map;
         }
-        String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() +"/upload/";//存储路径
-        String path = request.getServletContext().getRealPath("upload/"); //文件存储位置
+        String returnUrl = request.getScheme() + "://" + "localhost" + ":" + "8080" + request.getContextPath() +"/upload/";//存储路径
+        String path = request.getServletContext().getRealPath("/upload/"); //文件存储位置
+        System.out.println("returnUrl:"+returnUrl);
+        System.out.println("path:"+path);
         for (MultipartFile file : list) {
         	try
 			{
 				String fileName = UUIDCreator.getUUID();
 		          //获得文件后缀名 
 		        String suffixName=file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-				String savePath = path + fileName + suffixName;
+				String savePath = path + "\\" + fileName + suffixName;
 				String url = returnUrl + fileName + suffixName;
 				//小于10k，不压缩
 				if (file.getSize() <= 1024 * 10)
@@ -113,6 +115,8 @@ public class ReplyController
 					InputStream in = file.getInputStream();
 					Thumbnails.of(in).scale(0.15f).toFile(savePath);
 				}
+				System.out.println(savePath);
+				System.out.println(url);
 				urls.add(url);
 			}
 			catch (Exception e)

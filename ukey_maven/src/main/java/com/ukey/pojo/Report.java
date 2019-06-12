@@ -1,7 +1,13 @@
 package com.ukey.pojo;
 
-public class Report
+import java.io.Serializable;
+
+public class Report implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5111098158676828401L;
 	private int rpid;
 	private int uid;
 	private int rid;

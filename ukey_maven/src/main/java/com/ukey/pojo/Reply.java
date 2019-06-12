@@ -1,9 +1,14 @@
 package com.ukey.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Reply
+public class Reply implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 739246743455079383L;
 	private int rid;
 	private int uid;
 	private int pid;

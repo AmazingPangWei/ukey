@@ -60,7 +60,7 @@ public class Email
 		String content = "<h5>亲爱的ukey用户:</h5>\r\n" + "			您好！\r\n"
 				+ "			我们接受到了您的密码遗失的请求，<a href=\"%s\">请点击这个链接</a>，点击后即可修改您的密码，请您务必在同一个浏览器里操作，否则可能导致跳转不成功！<br/>\r\n"
 				+ "			若遇到任何问题，请与我们联系。<br />\r\n" + "			联系电话：15281737599，我们将努力解决您的问题<br />";
-		String href = String.format("http://localhost:8080/ukey/user/changePassword?identificationCode=%s",
+		String href = String.format("http://localhost:8080/ukey_maven/user/changePassword?identificationCode=%s",
 				identificationCode);
 		content = String.format(content, href);
 		message.setContent(content, "text/html;charset=UTF-8");

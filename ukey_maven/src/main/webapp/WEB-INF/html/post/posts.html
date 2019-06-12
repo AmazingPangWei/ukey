@@ -437,8 +437,6 @@ select.class_id>option:first-of-type{
 		var words = GetQueryString("words");
 		words = decodeURI(words);
 		// var words = decodeURI(GetQueryString("words"));
-		
-		console.log("===---");
 
 		console.log("words:"+words);
 		console.log(class_id);
@@ -498,11 +496,19 @@ function addNotes(datas, top){
 		addNote.attr("data-pid",datas[i]["pid"]);
 		if (top) {
 			$("#stick").removeClass("hidden");
+			// 将置顶图案改为取消置顶
+			addNote.children().eq(0).children().eq(1).children().eq(2).removeClass("glyphicon-chevron-up");
+			addNote.children().eq(0).children().eq(1).children().eq(2).addClass("glyphicon-chevron-down");
+			addNote.children().eq(0).children().eq(1).children().eq(2).attr("onclick","cancelTop(this)")
 		}
 		/*帖子的标题*/
 		addNote.children().eq(0).children().eq(0).text(datas[i]["title"]);
 		/*帖子的阅读次数*/
 		addNote.children().eq(0).children().eq(1).children().eq(1).text(datas[i]["reading"]);
+		
+
+
+
 		/*判断是否是管理员，如果是就把删除和置顶的图标显示出来*/
 		if (user != null && user["typeid"] == 2) {
 		addNote.children().eq(0).children().eq(1).children().eq(2).removeClass("hidden");
@@ -521,11 +527,14 @@ function addNotes(datas, top){
 		/*帖子n内容*/
 		// console.log("帖子内容:"+datas[i]["message"]);
 		addNote.children().eq(1).children().eq(1).attr("href","../reply/replys?pid="+datas[i]["pid"]);
-		addNote.children().eq(1).children().eq(1).text(datas[i]["message"]);
+		addNote.children().eq(1).children().eq(1).html(datas[i]["message"]);
 		/*发帖人*/
 		addNote.children().eq(2).children()[0].innerHTML = "发帖人："+datas[i]["user"]["uname"];
 		/*发帖时间*/
 		addNote.children().eq(2).children()[1].innerHTML = "发帖时间："+datas[i]["date"];
+
+
+
 		$("#room").append(addNote);
 	}
 }
@@ -607,11 +616,11 @@ function addNotes(datas, top){
 			contentType: "application/json; charset=utf-8", //数据格式
 			data: JSON.stringify({"class_id": class_id,"uid":user["uid"],"title":title,"message":content}),
 			dataType: "json",
-			function(r) {
-				console.log(r);
-				window.navigate(location);
-			}}
-			);
+			 success: function(result){
+	        	 alert("发帖成功");
+	        	 restartPage();
+	        }
+		});
 		$("#publish-note").addClass("hidden");
 	}
 	/*取消发帖*/
@@ -659,7 +668,28 @@ function addNotes(datas, top){
 	        type: "POST",
 	        dataType: "json",
 	        success: function(result){
-	             console.log("置顶操作"+result["result"]);
+	        	 alert("置顶成功");
+	        	 restartPage();
+	        }
+	    });
+	}
+
+		/*取消置顶*/
+	function cancelTop(obj){
+		var $obj = $(obj);
+		var pid = $obj.parent().parent().parent().attr("data-pid");
+		console.log("cancelTop:"+pid);
+		$.ajax({
+	        url: 'deleteTop',
+	        contentType: "application/json; charset=utf-8", //数据格式
+	        data:JSON.stringify({"pid":pid}),
+	        type: "POST",
+	        dataType: "json",
+	        success: function(result){
+	        	 if (result["result"]=="success") {
+	        	 	alert("取消置顶成功");
+	        	 	restartPage();
+	        	 }
 	        }
 	    });
 	}

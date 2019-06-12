@@ -1,7 +1,11 @@
 package com.ukey.pojo;
 
-public class Comment
+import java.io.Serializable;
+
+public class Comment implements Serializable
 {
+	
+	private static final long serialVersionUID = 1680979144203485237L;
 	private int cid;
 	private int rid;
 	private int c_uid;
